@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import avatarImage from "@/assets/images/avatar.jpeg";
+import avatarImage from "@assets/DCE3CE83-E932-4A7D-BF24-285F69E2C333_1769871474917.jpeg";
 
 export function HeroAvatar({ avatarUrl }: { avatarUrl?: string }) {
   const imageSrc = avatarImage;
