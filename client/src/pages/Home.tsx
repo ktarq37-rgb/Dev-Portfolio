@@ -43,11 +43,22 @@ export default function Home() {
       <section className="relative min-h-screen flex items-center justify-center pt-20 px-6">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/15 via-background to-background z-0" />
         
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center relative z-10 w-full">
+        <div className="max-w-7xl mx-auto flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-16 items-center relative z-10 w-full">
+          {/* Avatar - Mobile (shown first on mobile) */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.1 }}
+            className="lg:hidden w-full flex justify-center mb-4"
+          >
+            <HeroAvatar avatarUrl={profile.avatarUrl} />
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
+            className="text-center lg:text-left"
           >
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -58,16 +69,16 @@ export default function Home() {
               Available for Freelance
             </motion.div>
             
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold leading-[0.9] mb-6 tracking-tighter">
+            <h1 className="text-4xl md:text-6xl lg:text-8xl font-display font-bold leading-[0.9] mb-6 tracking-tighter">
               <span className="text-white">HI, I'M</span> <br />
               <span className="text-gradient">{profile.name.toUpperCase()}</span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-muted-foreground max-w-lg mb-10 leading-relaxed">
+            <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-lg mx-auto lg:mx-0 mb-10 leading-relaxed">
               {profile.title}. {profile.bio.split('.')[0]}.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <a 
                 href={profile.resumeUrl} 
                 className="border-beam glow-border relative px-8 py-4 bg-[#0a0a0a] rounded-full font-bold text-white group transition-all inline-flex items-center justify-center gap-2"
@@ -88,6 +99,7 @@ export default function Home() {
             </div>
           </motion.div>
           
+          {/* Avatar - Desktop (shown on the right) */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
