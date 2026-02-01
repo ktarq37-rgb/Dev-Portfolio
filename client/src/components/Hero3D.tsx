@@ -1,87 +1,119 @@
 import { motion } from "framer-motion";
-import avatarImage from "@assets/DCE3CE83-E932-4A7D-BF24-285F69E2C333_1769871474917.jpeg";
+import Tilt from "react-parallax-tilt";
+import avatarImage from "@assets/avatar-transparent.png";
 
 export function HeroAvatar({ avatarUrl }: { avatarUrl?: string }) {
-  const imageSrc = avatarImage;
-  
   return (
-    <div className="relative w-80 h-96 md:w-[400px] md:h-[480px] mx-auto flex items-end justify-center">
-      {/* Background glow - purple gradient matching the avatar */}
+    <div className="relative w-72 h-80 md:w-80 md:h-96 lg:w-[380px] lg:h-[420px] mx-auto flex items-end justify-center">
+      {/* Background glow that follows avatar outline */}
       <motion.div
         animate={{ 
-          scale: [1, 1.1, 1],
-          opacity: [0.4, 0.7, 0.4]
+          opacity: [0.4, 0.7, 0.4],
+          scale: [1, 1.02, 1]
         }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[120%] h-[60%] bg-gradient-to-t from-primary/50 via-purple-500/30 to-transparent rounded-[100%] blur-3xl"
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute inset-0 z-0"
+        style={{
+          background: 'radial-gradient(ellipse at center bottom, rgba(168, 85, 247, 0.4) 0%, transparent 70%)',
+        }}
       />
       
-      {/* Secondary glow ring */}
-      <motion.div
-        animate={{ 
-          scale: [1, 1.15, 1],
-          opacity: [0.2, 0.4, 0.2]
-        }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[90%] h-16 bg-primary/40 rounded-[100%] blur-2xl"
-      />
-      
-      {/* Floating Avatar Container */}
-      <motion.div
-        animate={{ 
-          y: [0, -15, 0],
-        }}
-        transition={{ 
-          duration: 5, 
-          repeat: Infinity, 
-          ease: "easeInOut",
-        }}
+      {/* 3D Tilt Container */}
+      <Tilt
         className="relative z-10 w-full h-full"
+        tiltMaxAngleX={15}
+        tiltMaxAngleY={15}
+        perspective={1000}
+        scale={1.02}
+        transitionSpeed={2000}
+        gyroscope={true}
       >
-        {/* Avatar Image with bottom fade */}
-        <div className="relative w-full h-full">
-          <img 
-            src={imageSrc} 
+        <motion.div
+          animate={{ 
+            y: [0, -12, 0],
+          }}
+          transition={{ 
+            duration: 4, 
+            repeat: Infinity, 
+            ease: "easeInOut",
+          }}
+          className="w-full h-full relative"
+        >
+          {/* Avatar with breathing glow */}
+          <motion.img 
+            src={avatarImage}
             alt="Hassan - 3D Avatar" 
-            className="w-full h-full object-cover object-top"
+            className="w-full h-full object-contain object-bottom"
+            animate={{
+              filter: [
+                'drop-shadow(0 0 20px rgba(168, 85, 247, 0.5))',
+                'drop-shadow(0 0 40px rgba(168, 85, 247, 0.7))',
+                'drop-shadow(0 0 20px rgba(168, 85, 247, 0.5))',
+              ]
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
           />
-          
-          {/* Bottom fade gradient - makes avatar blend into background */}
-          <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-background via-background/80 to-transparent" />
-          
-          {/* Subtle top gradient for depth */}
-          <div className="absolute top-0 left-0 right-0 h-1/4 bg-gradient-to-b from-background/20 to-transparent" />
-        </div>
-      </motion.div>
+        </motion.div>
+      </Tilt>
 
       {/* Decorative orbiting elements */}
       <motion.div 
         animate={{ rotate: 360 }}
         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        className="absolute top-20 -right-4 w-16 h-16 border border-secondary/30 rounded-full border-dashed"
+        className="absolute top-10 -right-4 w-14 h-14 border border-purple-500/30 rounded-full border-dashed"
       >
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-secondary rounded-full" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-purple-500 rounded-full" />
       </motion.div>
       
       <motion.div 
         animate={{ rotate: -360 }}
         transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-        className="absolute top-1/3 -left-6 w-20 h-20 border border-primary/30 rounded-full border-dashed"
+        className="absolute top-1/4 -left-4 w-16 h-16 border border-cyan-500/30 rounded-full border-dashed"
       >
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-primary rounded-full" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-cyan-500 rounded-full" />
       </motion.div>
 
       {/* Floating particles */}
       <motion.div
-        animate={{ y: [-10, 10, -10], x: [0, 5, 0] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/4 -right-2 w-3 h-3 bg-primary/60 rounded-full blur-sm"
+        animate={{ y: [-8, 8, -8], x: [0, 4, 0] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-1/4 right-0 w-2 h-2 bg-purple-400/80 rounded-full blur-[1px]"
       />
       <motion.div
-        animate={{ y: [10, -10, 10], x: [0, -5, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        className="absolute top-1/2 -left-3 w-2 h-2 bg-secondary/60 rounded-full blur-sm"
+        animate={{ y: [8, -8, 8], x: [0, -4, 0] }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+        className="absolute top-1/2 left-0 w-1.5 h-1.5 bg-cyan-400/80 rounded-full blur-[1px]"
       />
     </div>
+  );
+}
+
+// Magnetic Icon Component for social links
+export function MagneticIcon({ 
+  children, 
+  href, 
+  label 
+}: { 
+  children: React.ReactNode; 
+  href: string; 
+  label: string;
+}) {
+  return (
+    <motion.a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      className="relative w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:border-purple-500/50 hover:bg-purple-500/10 transition-colors"
+      whileHover={{ scale: 1.15 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+    >
+      {children}
+    </motion.a>
   );
 }

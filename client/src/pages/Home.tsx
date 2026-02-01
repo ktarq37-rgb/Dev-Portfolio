@@ -1,12 +1,26 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
-import { HeroAvatar } from "@/components/Hero3D";
-import { ProjectCard } from "@/components/ProjectCard";
-import { ServiceCard } from "@/components/ServiceCard";
+import { HeroAvatar, MagneticIcon } from "@/components/Hero3D";
+import { BentoCard, BentoGrid } from "@/components/BentoGrid";
 import { ContactForm } from "@/components/ContactForm";
 import { useProfile, useProjects, useSkills, useServices } from "@/hooks/use-portfolio";
-import { ArrowDown, Mail } from "lucide-react";
+import { ArrowDown, Mail, Github, Linkedin, Twitter, ExternalLink, Code, Palette, Smartphone, Lightbulb } from "lucide-react";
+import { SiCplusplus, SiPython, SiReact, SiTypescript, SiNodedotjs, SiPostgresql, SiTailwindcss, SiDocker } from "react-icons/si";
+
+const iconMap: Record<string, any> = {
+  Code, Palette, Smartphone, Lightbulb
+};
+
+const techIcons: Record<string, any> = {
+  "React": SiReact,
+  "TypeScript": SiTypescript,
+  "Node.js": SiNodedotjs,
+  "PostgreSQL": SiPostgresql,
+  "Tailwind CSS": SiTailwindcss,
+  "Docker": SiDocker,
+  "C++": SiCplusplus,
+  "Python": SiPython,
+};
 
 export default function Home() {
   const { data: profile } = useProfile();
@@ -14,229 +28,295 @@ export default function Home() {
   const { data: skills } = useSkills();
   const { data: services } = useServices();
 
-  const aboutRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: aboutProgress } = useScroll({
-    target: aboutRef,
-    offset: ["start end", "end start"]
-  });
-  
-  const aboutOpacity = useTransform(aboutProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
-  const aboutY = useTransform(aboutProgress, [0, 0.3, 0.7, 1], [60, 0, 0, -60]);
-
   if (!profile) return (
-    <div className="min-h-screen bg-background flex items-center justify-center text-white noise-bg grid-bg">
-      <div className="flex flex-col items-center gap-4 relative z-10">
-        <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-        <p className="text-muted-foreground font-mono text-sm tracking-wider">Initializing Portfolio...</p>
+    <div className="min-h-screen bg-[#050505] flex items-center justify-center">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-10 h-10 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+        <p className="text-white/50 font-mono text-sm tracking-wider">Loading...</p>
       </div>
     </div>
   );
 
+  const featuredProjects = projects?.filter(p => p.featured).slice(0, 2) || [];
+
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden noise-bg">
-      {/* Grid background pattern */}
-      <div className="fixed inset-0 grid-bg pointer-events-none z-0" />
+    <div className="min-h-screen bg-[#050505] text-white overflow-x-hidden">
+      {/* Noise texture overlay */}
+      <div className="fixed inset-0 opacity-[0.015] pointer-events-none z-0" 
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`
+        }}
+      />
+      
+      {/* Subtle grid */}
+      <div className="fixed inset-0 pointer-events-none z-0"
+        style={{
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)',
+          backgroundSize: '80px 80px'
+        }}
+      />
+
+      {/* Ambient gradient */}
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-purple-500/10 rounded-full blur-[150px] pointer-events-none z-0" />
       
       <Navbar />
 
-      {/* --- HERO SECTION --- */}
-      <section className="relative min-h-screen flex items-center justify-center pt-20 px-6">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/15 via-background to-background z-0" />
-        
-        <div className="max-w-7xl mx-auto flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-16 items-center relative z-10 w-full">
-          {/* Avatar - Mobile (shown first on mobile) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.1 }}
-            className="lg:hidden w-full flex justify-center mb-4"
-          >
-            <HeroAvatar avatarUrl={profile.avatarUrl} />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-center lg:text-left"
-          >
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="inline-block px-4 py-2 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-bold mb-8 backdrop-blur-sm"
-            >
-              Available for Freelance
-            </motion.div>
-            
-            <h1 className="text-4xl md:text-6xl lg:text-8xl font-display font-bold leading-[0.9] mb-6 tracking-tighter">
-              <span className="text-white">HI, I'M</span> <br />
-              <span className="text-gradient">{profile.name.toUpperCase()}</span>
-            </h1>
-            
-            <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-lg mx-auto lg:mx-0 mb-10 leading-relaxed">
-              {profile.title}. {profile.bio.split('.')[0]}.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <a 
-                href={profile.resumeUrl} 
-                className="border-beam glow-border relative px-8 py-4 bg-[#0a0a0a] rounded-full font-bold text-white group transition-all inline-flex items-center justify-center gap-2"
-                data-testid="button-download-cv"
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  Download CV <ArrowDown size={18} className="group-hover:translate-y-1 transition-transform" />
-                </span>
-              </a>
-              
-              <a 
-                href="#contact"
-                className="px-8 py-4 rounded-full border border-white/10 text-white font-bold hover:bg-white/5 hover:border-white/20 transition-all flex items-center justify-center gap-2"
-                data-testid="button-contact"
-              >
-                Let's Talk <Mail size={18} />
-              </a>
-            </div>
-          </motion.div>
+      {/* --- BENTO GRID HERO --- */}
+      <section className="relative min-h-screen pt-24 pb-16 px-4 md:px-6">
+        <div className="max-w-7xl mx-auto relative z-10">
           
-          {/* Avatar - Desktop (shown on the right) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="hidden lg:block"
-          >
-            <HeroAvatar avatarUrl={profile.avatarUrl} />
-          </motion.div>
-        </div>
+          {/* Main Bento Grid */}
+          <BentoGrid className="grid-cols-1 md:grid-cols-3 lg:grid-cols-4 auto-rows-[180px] md:auto-rows-[200px]">
+            
+            {/* Hero Text - Large Card */}
+            <BentoCard className="md:col-span-2 lg:col-span-2 md:row-span-2 p-8 flex flex-col justify-center" delay={0}>
+              <motion.span 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, type: "spring" }}
+                className="inline-block px-3 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-400 text-xs font-bold mb-6 w-fit"
+              >
+                Available for Freelance
+              </motion.span>
+              
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold leading-[0.95] mb-4 tracking-tight">
+                <span className="text-white">HI, I'M</span> <br />
+                <span className="bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+                  {profile.name.toUpperCase()}
+                </span>
+              </h1>
+              
+              <p className="text-base md:text-lg text-white/60 max-w-md mb-6 leading-relaxed">
+                {profile.title}
+              </p>
+              
+              <div className="flex flex-wrap gap-3">
+                <motion.a 
+                  href={profile.resumeUrl}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                  className="px-6 py-3 bg-white text-black rounded-full font-bold text-sm flex items-center gap-2 hover:bg-white/90"
+                  data-testid="button-download-cv"
+                >
+                  Download CV <ArrowDown size={16} />
+                </motion.a>
+                
+                <motion.a 
+                  href="#contact"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                  className="px-6 py-3 rounded-full border border-white/20 text-white font-bold text-sm flex items-center gap-2 hover:bg-white/5"
+                  data-testid="button-contact"
+                >
+                  Let's Talk <Mail size={16} />
+                </motion.a>
+              </div>
+            </BentoCard>
 
-        {/* Scroll Indicator */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 1 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/40 flex flex-col items-center gap-2"
-        >
-          <span className="text-xs uppercase tracking-[0.3em] font-light">Scroll</span>
+            {/* Avatar Card - Center Piece */}
+            <BentoCard className="md:col-span-1 lg:col-span-2 md:row-span-2 p-0 flex items-end justify-center overflow-hidden" delay={0.1}>
+              <HeroAvatar avatarUrl={profile.avatarUrl} />
+            </BentoCard>
+
+            {/* Tech Stack Card */}
+            <BentoCard className="md:col-span-2 lg:col-span-2 p-6" delay={0.2}>
+              <h3 className="text-xs font-bold text-purple-400 tracking-widest uppercase mb-4">Tech Stack</h3>
+              <div className="flex flex-wrap gap-3">
+                {skills?.slice(0, 8).map((skill, i) => {
+                  const IconComponent = techIcons[skill.name];
+                  return (
+                    <motion.div
+                      key={skill.id}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.3 + i * 0.05, type: "spring" }}
+                      whileHover={{ scale: 1.1, y: -2 }}
+                      className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/5 text-white/70 hover:text-white hover:border-purple-500/30 transition-colors"
+                    >
+                      {IconComponent && <IconComponent className="w-4 h-4" />}
+                      <span className="text-xs font-medium">{skill.name}</span>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </BentoCard>
+
+            {/* Social Links Card */}
+            <BentoCard className="md:col-span-1 lg:col-span-1 p-6 flex flex-col justify-between" delay={0.25}>
+              <h3 className="text-xs font-bold text-purple-400 tracking-widest uppercase mb-4">Connect</h3>
+              <div className="flex gap-3">
+                <MagneticIcon href="https://github.com" label="GitHub">
+                  <Github size={20} />
+                </MagneticIcon>
+                <MagneticIcon href="https://linkedin.com" label="LinkedIn">
+                  <Linkedin size={20} />
+                </MagneticIcon>
+                <MagneticIcon href="https://twitter.com" label="Twitter">
+                  <Twitter size={20} />
+                </MagneticIcon>
+              </div>
+            </BentoCard>
+
+            {/* Services Card */}
+            <BentoCard className="md:col-span-1 lg:col-span-1 p-6" delay={0.3}>
+              <h3 className="text-xs font-bold text-purple-400 tracking-widest uppercase mb-4">Services</h3>
+              <div className="space-y-2">
+                {services?.slice(0, 3).map((service, i) => {
+                  const IconComp = iconMap[service.icon] || Code;
+                  return (
+                    <motion.div
+                      key={service.id}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.4 + i * 0.1, type: "spring" }}
+                      className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"
+                    >
+                      <IconComp size={14} className="text-purple-400" />
+                      <span className="text-xs">{service.title}</span>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </BentoCard>
+
+            {/* Featured Project 1 */}
+            {featuredProjects[0] && (
+              <BentoCard className="md:col-span-2 lg:col-span-2 p-0 group" delay={0.35}>
+                <div className="relative w-full h-full overflow-hidden">
+                  <img 
+                    src={featuredProjects[0].imageUrl} 
+                    alt={featuredProjects[0].title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <div className="flex gap-2 mb-2">
+                      {featuredProjects[0].tags?.slice(0, 2).map(tag => (
+                        <span key={tag} className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <h4 className="text-lg font-bold text-white mb-1">{featuredProjects[0].title}</h4>
+                    <p className="text-xs text-white/60 line-clamp-2">{featuredProjects[0].description}</p>
+                  </div>
+                  {featuredProjects[0].liveUrl && (
+                    <a 
+                      href={featuredProjects[0].liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <ExternalLink size={16} />
+                    </a>
+                  )}
+                </div>
+              </BentoCard>
+            )}
+
+            {/* Featured Project 2 */}
+            {featuredProjects[1] && (
+              <BentoCard className="md:col-span-1 lg:col-span-2 p-0 group" delay={0.4}>
+                <div className="relative w-full h-full overflow-hidden">
+                  <img 
+                    src={featuredProjects[1].imageUrl} 
+                    alt={featuredProjects[1].title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <div className="flex gap-2 mb-2">
+                      {featuredProjects[1].tags?.slice(0, 2).map(tag => (
+                        <span key={tag} className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <h4 className="text-lg font-bold text-white mb-1">{featuredProjects[1].title}</h4>
+                    <p className="text-xs text-white/60 line-clamp-2">{featuredProjects[1].description}</p>
+                  </div>
+                  {featuredProjects[1].liveUrl && (
+                    <a 
+                      href={featuredProjects[1].liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <ExternalLink size={16} />
+                    </a>
+                  )}
+                </div>
+              </BentoCard>
+            )}
+
+          </BentoGrid>
+
+          {/* About Section */}
           <motion.div 
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="w-0.5 h-12 rounded-full bg-gradient-to-b from-primary via-primary/50 to-transparent"
-          />
-        </motion.div>
-      </section>
-
-      {/* --- TECH STACK (Marquee) --- */}
-      <section className="py-20 border-y border-white/5 bg-black/60 backdrop-blur-sm overflow-hidden relative">
-        <div className="flex gap-8 animate-infinite-scroll min-w-max">
-          {[...(skills || []), ...(skills || [])].map((skill, i) => (
-            <div 
-              key={`${skill.name}-${i}`} 
-              className="flex items-center gap-3 px-6 py-3 rounded-2xl bg-white/5 border border-white/5 text-white/70 hover:text-white hover:border-primary/40 hover:bg-white/10 transition-all duration-300"
-              data-testid={`badge-skill-${skill.id}-${i}`}
-            >
-              <span className="font-mono text-base font-semibold tracking-wide">{skill.name}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* --- SERVICES --- */}
-      <section id="services" className="py-32 px-6 relative">
-        <div className="max-w-7xl mx-auto">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mb-16 md:mb-24"
+            transition={{ type: "spring", stiffness: 50, damping: 20 }}
+            className="mt-16 max-w-3xl mx-auto text-center"
           >
-            <h2 className="text-sm font-bold text-primary tracking-[0.2em] uppercase mb-4">What I Do</h2>
-            <h3 className="text-4xl md:text-6xl font-display font-bold tracking-tight">Services & Expertise</h3>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services?.map((service, index) => (
-              <ServiceCard key={service.id} service={service} index={index} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* --- PROJECTS (Sticky Stack) --- */}
-      <section id="projects" className="py-32 px-6 bg-gradient-to-b from-background via-secondary/5 to-background relative">
-        <div className="max-w-5xl mx-auto">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-16 md:mb-24 text-center"
-          >
-            <h2 className="text-sm font-bold text-primary tracking-[0.2em] uppercase mb-4">Portfolio</h2>
-            <h3 className="text-4xl md:text-6xl font-display font-bold tracking-tight">Selected Works</h3>
-          </motion.div>
-
-          <div className="relative">
-            {projects?.map((project, index) => (
-              <ProjectCard 
-                key={project.id} 
-                project={project} 
-                index={index} 
-                total={projects.length} 
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* --- ABOUT (Scroll Reveal) --- */}
-      <section id="about" className="py-32 px-6 relative overflow-hidden" ref={aboutRef}>
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div style={{ opacity: aboutOpacity, y: aboutY }}>
-            <h2 className="text-7xl md:text-9xl font-display font-bold text-white/5 mb-8 tracking-tighter">ABOUT</h2>
-            <p className="text-2xl md:text-3xl lg:text-4xl leading-relaxed font-light text-foreground/90 tracking-tight">
+            <h2 className="text-6xl md:text-8xl font-display font-bold text-white/5 mb-6">ABOUT</h2>
+            <p className="text-xl md:text-2xl text-white/70 leading-relaxed font-light">
               {profile.bio}
             </p>
           </motion.div>
+
         </div>
       </section>
 
-      {/* --- CONTACT --- */}
-      <section id="contact" className="py-32 px-6 relative overflow-hidden">
-        {/* Decorative blobs */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[150px] -z-10" />
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[150px] -z-10" />
+      {/* --- CONTACT SECTION --- */}
+      <section id="contact" className="py-24 px-4 md:px-6 relative">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[150px] pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[150px] pointer-events-none" />
 
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 md:gap-24">
-          <div>
-            <h2 className="text-5xl md:text-7xl font-display font-bold mb-8 tracking-tight">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ type: "spring", stiffness: 50, damping: 20 }}
+          >
+            <h2 className="text-4xl md:text-6xl font-display font-bold mb-6 tracking-tight">
               Let's work <br />
-              <span className="text-gradient-accent">together.</span>
+              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+                together.
+              </span>
             </h2>
-            <p className="text-xl text-muted-foreground mb-12 leading-relaxed">
+            <p className="text-lg text-white/60 mb-10 leading-relaxed">
               Have a project in mind? Looking for a partner to help build your next big idea? Reach out and let's start a conversation.
             </p>
             
-            <div className="space-y-6">
-              <div className="flex items-center gap-4 text-lg">
-                <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-primary border border-white/10">
-                  <Mail size={24} />
-                </div>
-                <a href="mailto:hello@example.com" className="hover:text-primary transition-colors font-medium">
-                  hello@example.com
-                </a>
+            <div className="flex items-center gap-4 text-lg">
+              <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-purple-400 border border-white/10">
+                <Mail size={24} />
               </div>
+              <a href="mailto:hello@example.com" className="hover:text-purple-400 transition-colors font-medium">
+                hello@example.com
+              </a>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="glass-card p-8 md:p-10 rounded-3xl border border-white/10">
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ type: "spring", stiffness: 50, damping: 20, delay: 0.1 }}
+            className="backdrop-blur-xl bg-white/[0.03] p-8 rounded-3xl border border-white/[0.08]"
+          >
             <ContactForm />
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* --- FOOTER --- */}
-      <footer className="py-10 text-center text-muted-foreground border-t border-white/5 relative z-10">
-        <p className="text-sm tracking-wide">&copy; {new Date().getFullYear()} {profile.name}. All rights reserved.</p>
+      <footer className="py-8 text-center text-white/40 border-t border-white/5">
+        <p className="text-sm">&copy; {new Date().getFullYear()} {profile.name}. All rights reserved.</p>
       </footer>
     </div>
   );
