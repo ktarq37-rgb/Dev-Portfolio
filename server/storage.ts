@@ -1,12 +1,9 @@
-import { db } from "./db";
 import {
-  profile, skills, projects, services,
   type Profile, type InsertProfile,
   type Skill, type InsertSkill,
   type Project, type InsertProject,
   type Service, type InsertService
 } from "@shared/schema";
-import { eq } from "drizzle-orm";
 
 export interface IStorage {
   // Profile
@@ -26,47 +23,65 @@ export interface IStorage {
   createService(service: InsertService): Promise<Service>;
 }
 
-export class DatabaseStorage implements IStorage {
+export class MemoryStorage implements IStorage {
+  private profileData: Profile | undefined;
+  private skillsData: Skill[] = [];
+  private projectsData: Project[] = [];
+  private servicesData: Service[] = [];
+  private nextId = 1;
+
   // Profile
   async getProfile(): Promise<Profile | undefined> {
-    const [data] = await db.select().from(profile).limit(1);
-    return data;
+    return this.profileData;
   }
 
   async createProfile(insertProfile: InsertProfile): Promise<Profile> {
-    const [data] = await db.insert(profile).values(insertProfile).returning();
+    const data: Profile = { id: this.nextId++, ...insertProfile, socialLinks: insertProfile.socialLinks ?? null };
+    this.profileData = data;
     return data;
   }
 
   // Skills
   async getSkills(): Promise<Skill[]> {
-    return await db.select().from(skills);
+    return this.skillsData;
   }
 
   async createSkill(insertSkill: InsertSkill): Promise<Skill> {
-    const [data] = await db.insert(skills).values(insertSkill).returning();
+    const data: Skill = { id: this.nextId++, ...insertSkill };
+    this.skillsData.push(data);
     return data;
   }
 
   // Projects
   async getProjects(): Promise<Project[]> {
-    return await db.select().from(projects);
+    return this.projectsData;
   }
 
   async createProject(insertProject: InsertProject): Promise<Project> {
-    const [data] = await db.insert(projects).values(insertProject).returning();
+    const data: Project = {
+      id: this.nextId++,
+      title: insertProject.title,
+      description: insertProject.description,
+      imageUrl: insertProject.imageUrl,
+      liveUrl: insertProject.liveUrl ?? null,
+      repoUrl: insertProject.repoUrl ?? null,
+      tags: insertProject.tags ?? null,
+      featured: insertProject.featured ?? false,
+    };
+    this.projectsData.push(data);
     return data;
   }
 
   // Services
   async getServices(): Promise<Service[]> {
-    return await db.select().from(services);
+    return this.servicesData;
   }
 
   async createService(insertService: InsertService): Promise<Service> {
-    const [data] = await db.insert(services).values(insertService).returning();
+    const data: Service = { id: this.nextId++, ...insertService };
+    this.servicesData.push(data);
     return data;
   }
 }
 
-export const storage = new DatabaseStorage();
+export const storage = new MemoryStorage();
