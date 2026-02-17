@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Navbar } from "@/components/navbar";
@@ -19,6 +20,9 @@ import {
   Smartphone,
   Lightbulb,
   ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
+  Briefcase,
   Terminal,
   Settings,
   Server,
@@ -58,6 +62,174 @@ const fadeUp = {
     transition: { type: "spring", stiffness: 80, damping: 20, delay: i * 0.08 },
   }),
 };
+
+/* ---- Projects Carousel ---- */
+function ProjectsCarousel({ projects }: { projects: Project[] }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scroll = useCallback((direction: "left" | "right") => {
+    if (!scrollRef.current) return;
+    const cardWidth = scrollRef.current.querySelector("div")?.offsetWidth ?? 400;
+    const offset = direction === "left" ? -(cardWidth + 16) : cardWidth + 16;
+    scrollRef.current.scrollBy({ left: offset, behavior: "smooth" });
+  }, []);
+
+  return (
+    <section id="projects" className="py-24 px-4 md:px-6 relative">
+      <div className="max-w-6xl mx-auto relative z-10">
+        {/* Header row */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="mb-10"
+        >
+          <motion.span
+            variants={fadeUp}
+            custom={0}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-950 text-white/60 text-xs font-medium mb-5"
+          >
+            <Briefcase size={14} className="text-white/50" />
+            Projects
+          </motion.span>
+
+          <div className="flex items-start justify-between gap-6">
+            <div>
+              <motion.h2
+                variants={fadeUp}
+                custom={1}
+                className="text-3xl md:text-5xl font-sans font-bold text-white mb-3 text-balance leading-tight"
+              >
+                You need proof I can actually do the work?
+              </motion.h2>
+              <motion.p
+                variants={fadeUp}
+                custom={2}
+                className="text-white/35 text-sm md:text-base max-w-xl leading-relaxed"
+              >
+                These are the projects that made me forget to eat, sleep, and socialize. It was worth it.
+              </motion.p>
+            </div>
+
+            {/* Navigation + See all */}
+            <motion.div
+              variants={fadeUp}
+              custom={2}
+              className="hidden md:flex flex-col items-end gap-3 shrink-0 pt-2"
+            >
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => scroll("left")}
+                  aria-label="Scroll left"
+                  className="w-10 h-10 rounded-full border border-neutral-800 bg-neutral-950 flex items-center justify-center text-white/50 hover:text-white hover:border-neutral-700 transition-colors"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                <button
+                  onClick={() => scroll("right")}
+                  aria-label="Scroll right"
+                  className="w-10 h-10 rounded-full border border-neutral-800 bg-neutral-950 flex items-center justify-center text-white/50 hover:text-white hover:border-neutral-700 transition-colors"
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </div>
+              <span className="text-sm text-white/50 hover:text-white transition-colors cursor-pointer">
+                See all
+              </span>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Scrollable cards row */}
+        <div
+          ref={scrollRef}
+          className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          {projects.map((project, i) => (
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ type: "spring", stiffness: 80, damping: 20, delay: i * 0.1 }}
+              className="snap-start shrink-0 w-[85vw] md:w-[420px]"
+            >
+              <motion.div
+                whileHover={{ y: -4 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                className="group relative rounded-2xl bg-neutral-950 border border-neutral-800 hover:border-neutral-700 overflow-hidden transition-colors duration-300 h-full flex flex-col"
+              >
+                {/* Screenshot */}
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <Image
+                    src={project.imageUrl}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 768px) 85vw, 420px"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent" />
+
+                  {/* External link arrow */}
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="absolute bottom-3 right-3 w-10 h-10 rounded-xl bg-neutral-950/80 backdrop-blur-sm border border-neutral-800 flex items-center justify-center text-white/60 hover:text-white hover:border-neutral-700 transition-all"
+                    >
+                      <ArrowUpRight size={18} />
+                    </a>
+                  )}
+                </div>
+
+                {/* Tags + title */}
+                <div className="p-4 flex flex-col gap-2">
+                  <div className="flex flex-wrap gap-2">
+                    {project.tags?.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-3 py-1 text-xs font-mono text-white/50 rounded-lg bg-neutral-900 border border-neutral-800"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <h3 className="text-base font-bold text-white">{project.title}</h3>
+                  <p className="text-xs text-white/35 leading-relaxed line-clamp-2">
+                    {project.description}
+                  </p>
+                </div>
+              </motion.div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Mobile navigation */}
+        <div className="flex md:hidden items-center justify-between mt-4">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => scroll("left")}
+              aria-label="Scroll left"
+              className="w-10 h-10 rounded-full border border-neutral-800 bg-neutral-950 flex items-center justify-center text-white/50 hover:text-white transition-colors"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <button
+              onClick={() => scroll("right")}
+              aria-label="Scroll right"
+              className="w-10 h-10 rounded-full border border-neutral-800 bg-neutral-950 flex items-center justify-center text-white/50 hover:text-white transition-colors"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
+          <span className="text-sm text-white/50">See all</span>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 /* ---- Component ---- */
 interface PortfolioPageProps {
@@ -338,100 +510,8 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
         </div>
       </section>
 
-      {/* ========== ALL PROJECTS ========== */}
-      <section id="projects" className="py-24 px-4 md:px-6 relative">
-        <div className="max-w-6xl mx-auto relative z-10">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="mb-12"
-          >
-            <motion.h2
-              variants={fadeUp}
-              custom={0}
-              className="text-3xl md:text-4xl font-sans font-bold text-white mb-2"
-            >
-              Projects
-            </motion.h2>
-            <motion.p variants={fadeUp} custom={1} className="text-white/40 text-sm">
-              A selection of recent work
-            </motion.p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {projects.map((project, i) => (
-              <motion.div
-                key={project.id}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                custom={i}
-                variants={fadeUp}
-              >
-                <motion.div
-                  whileHover={{ y: -4, scale: 1.01 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                  className="group relative rounded-2xl bg-neutral-950 border border-neutral-800 hover:border-neutral-700 overflow-hidden transition-colors duration-300"
-                >
-                  <div className="relative aspect-[16/10] overflow-hidden">
-                    <Image
-                      src={project.imageUrl}
-                      alt={project.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-
-                    {(project.liveUrl || project.repoUrl) && (
-                      <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {project.liveUrl && (
-                          <a
-                            href={project.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-                          >
-                            <ExternalLink size={14} />
-                          </a>
-                        )}
-                        {project.repoUrl && (
-                          <a
-                            href={project.repoUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-                          >
-                            <Github size={14} />
-                          </a>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="p-4">
-                    <div className="flex gap-1.5 mb-2">
-                      {project.tags?.map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-2 py-0.5 text-[9px] font-mono font-semibold rounded-md bg-white/[0.04] text-white/50 border border-neutral-800"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    <h3 className="text-sm font-bold text-white mb-1">{project.title}</h3>
-                    <p className="text-[12px] text-white/40 leading-relaxed line-clamp-2">
-                      {project.description}
-                    </p>
-                  </div>
-                </motion.div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ========== PROJECTS CAROUSEL ========== */}
+      <ProjectsCarousel projects={projects} />
 
       {/* ========== SERVICES ========== */}
       <section id="services" className="py-24 px-4 md:px-6 relative">

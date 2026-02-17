@@ -124,6 +124,14 @@
     @apply bg-white/[0.03] backdrop-blur-xl border border-white/[0.06];
   }
 
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
   .noise-bg::before {
     content: '';
     position: fixed;
