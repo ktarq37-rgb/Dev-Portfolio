@@ -7,11 +7,11 @@ export interface Profile {
   socialLinks: { platform: string; url: string; icon: string }[];
 }
 
-export interface Skill {
+export interface SkillCategory {
   id: number;
-  name: string;
+  title: string;
   icon: string;
-  category: string;
+  items: string[];
 }
 
 export interface Project {
@@ -45,15 +45,37 @@ export const profile: Profile = {
   ],
 };
 
-export const skills: Skill[] = [
-  { id: 1, name: "React", icon: "SiReact", category: "frontend" },
-  { id: 2, name: "Next.js", icon: "SiNextdotjs", category: "frontend" },
-  { id: 3, name: "TypeScript", icon: "SiTypescript", category: "frontend" },
-  { id: 4, name: "Node.js", icon: "SiNodedotjs", category: "backend" },
-  { id: 5, name: "PostgreSQL", icon: "SiPostgresql", category: "backend" },
-  { id: 6, name: "Tailwind CSS", icon: "SiTailwindcss", category: "frontend" },
-  { id: 7, name: "Figma", icon: "SiFigma", category: "tool" },
-  { id: 8, name: "Docker", icon: "SiDocker", category: "tool" },
+export const skillCategories: SkillCategory[] = [
+  {
+    id: 1,
+    title: "General Programming",
+    icon: "Terminal",
+    items: ["Typescript", "Node.js", "Python", "Golang", "PHP"],
+  },
+  {
+    id: 2,
+    title: "Others",
+    icon: "Settings",
+    items: ["Figma", "Docker", "Playwright", "Tensorflow", "OpenCV", "AWS", "Supabase", "n8n"],
+  },
+  {
+    id: 3,
+    title: "Backend",
+    icon: "Server",
+    items: ["Express.js", "FastAPI", "Fiber", "Apollo", "Socket.io"],
+  },
+  {
+    id: 4,
+    title: "Web Framework & UI",
+    icon: "Monitor",
+    items: ["Next.js", "Laravel", "React", "Tailwind"],
+  },
+  {
+    id: 5,
+    title: "Database",
+    icon: "Database",
+    items: ["MongoDB", "MySQL", "Postgres", "Redis"],
+  },
 ];
 
 export const services: Service[] = [

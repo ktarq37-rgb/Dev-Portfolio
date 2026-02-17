@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const navLinks = [
+  { name: "Skills", href: "#skills" },
   { name: "About", href: "#about" },
   { name: "Projects", href: "#projects" },
   { name: "Services", href: "#services" },
@@ -32,7 +33,7 @@ export function Navbar() {
       <div
         className={`max-w-6xl mx-auto rounded-2xl px-5 py-2.5 flex items-center justify-between transition-all duration-300 ${
           scrolled
-            ? "bg-slate-950/80 backdrop-blur-xl border border-white/[0.06] shadow-2xl shadow-black/40"
+            ? "bg-black/80 backdrop-blur-xl border border-neutral-800 shadow-2xl shadow-black/40"
             : "bg-transparent border border-transparent"
         }`}
       >
@@ -79,7 +80,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.2 }}
-            className="absolute top-16 left-4 right-4 p-5 rounded-2xl bg-slate-950/95 backdrop-blur-xl border border-white/[0.06] md:hidden flex flex-col gap-1"
+            className="absolute top-16 left-4 right-4 p-5 rounded-2xl bg-black/95 backdrop-blur-xl border border-neutral-800 md:hidden flex flex-col gap-1"
           >
             {navLinks.map((link) => (
               <a

@@ -44,9 +44,9 @@ export function BentoCard({ children, className = "", delay = 0 }: BentoCardProp
       onMouseMove={handleMouseMove}
       className={`
         group/card relative overflow-hidden rounded-2xl
-        bg-slate-950/80 backdrop-blur-xl
-        border border-white/[0.06]
-        hover:border-violet-500/25
+        bg-neutral-950 backdrop-blur-xl
+        border border-neutral-800
+        hover:border-neutral-700
         transition-colors duration-300
         ${className}
       `}
