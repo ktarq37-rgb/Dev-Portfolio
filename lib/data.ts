@@ -36,7 +36,7 @@ export const profile: Profile = {
   name: "Alex Dev",
   title: "Full Stack Engineer & UI Designer",
   bio: "I craft high-performance digital experiences with a focus on motion, aesthetics, and scalability. Based in San Francisco, working globally.",
-  avatarUrl: "/images/avatar.jpeg",
+  avatarUrl: "/images/avatar-transparent.png",
   resumeUrl: "/resume.pdf",
   socialLinks: [
     { platform: "GitHub", url: "https://github.com", icon: "Github" },

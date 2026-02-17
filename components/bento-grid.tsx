@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
-import type { ReactNode } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
+import { useRef, type ReactNode, type MouseEvent } from "react";
 
 interface BentoCardProps {
   children: ReactNode;
@@ -10,31 +10,55 @@ interface BentoCardProps {
 }
 
 export function BentoCard({ children, className = "", delay = 0 }: BentoCardProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springX = useSpring(mouseX, { stiffness: 500, damping: 50 });
+  const springY = useSpring(mouseY, { stiffness: 500, damping: 50 });
+
+  function handleMouseMove(e: MouseEvent<HTMLDivElement>) {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    mouseX.set(e.clientX - rect.left);
+    mouseY.set(e.clientY - rect.top);
+  }
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      ref={ref}
+      initial={{ opacity: 0, y: 24, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{
         type: "spring",
-        stiffness: 100,
-        damping: 15,
+        stiffness: 120,
+        damping: 18,
         delay,
       }}
       whileHover={{
-        scale: 1.02,
-        transition: { type: "spring", stiffness: 300, damping: 20 },
+        scale: 1.015,
+        transition: { type: "spring", stiffness: 400, damping: 25 },
       }}
+      onMouseMove={handleMouseMove}
       className={`
-        relative overflow-hidden rounded-3xl
-        bg-white/[0.03] backdrop-blur-xl
-        border border-white/[0.08]
-        hover:border-purple-500/30
+        group/card relative overflow-hidden rounded-2xl
+        bg-slate-950/80 backdrop-blur-xl
+        border border-white/[0.06]
+        hover:border-violet-500/25
         transition-colors duration-300
         ${className}
       `}
     >
-      {/* Glassmorphism shine effect */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] via-transparent to-transparent pointer-events-none" />
+      {/* Per-card hover glow that follows cursor */}
+      <motion.div
+        className="pointer-events-none absolute -inset-px z-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"
+        style={{
+          background: `radial-gradient(400px circle at ${springX.get()}px ${springY.get()}px, rgba(124,58,237,0.08), transparent 60%)`,
+        }}
+      />
+
+      {/* Top edge shine */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
       <div className="relative z-10 h-full">{children}</div>
     </motion.div>
@@ -48,5 +72,5 @@ export function BentoGrid({
   children: ReactNode;
   className?: string;
 }) {
-  return <div className={`grid gap-4 md:gap-5 ${className}`}>{children}</div>;
+  return <div className={`grid gap-3 md:gap-4 ${className}`}>{children}</div>;
 }
