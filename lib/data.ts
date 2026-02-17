@@ -1,6 +1,7 @@
 export interface Profile {
   name: string;
   title: string;
+  tagline: string;
   bio: string;
   avatarUrl: string;
   resumeUrl: string;
@@ -33,9 +34,11 @@ export interface Service {
 }
 
 export const profile: Profile = {
-  name: "Alex Dev",
-  title: "Full Stack Engineer & UI Designer",
-  bio: "I craft high-performance digital experiences with a focus on motion, aesthetics, and scalability. Based in San Francisco, working globally.",
+  name: "Hassan",
+  title: "Fullstack Web Developer",
+  tagline:
+    "who delivers Fullstack Solutions that connecting the dots between Users and Business Goals",
+  bio: "I craft high-performance digital experiences with a focus on motion, aesthetics, and scalability. Working globally to deliver fullstack solutions.",
   avatarUrl: "/images/avatar-transparent.png",
   resumeUrl: "/resume.pdf",
   socialLinks: [
@@ -112,38 +115,24 @@ export const services: Service[] = [
 export const projects: Project[] = [
   {
     id: 1,
-    title: "Neon Dashboard",
+    title: "Beauty Glow",
     description:
-      "A futuristic analytics dashboard with real-time data visualization and dark mode UI.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    liveUrl: "#",
-    repoUrl: "#",
-    tags: ["React", "D3.js", "Tailwind"],
+      "A comprehensive E-commerce platform for beauty and skincare products with a sleek, modern shopping experience.",
+    imageUrl: "/images/beautyglow.jpg",
+    liveUrl: "https://beautyglow-sd.vercel.app/",
+    repoUrl: null,
+    tags: ["E-commerce", "Next.js", "Fullstack"],
     featured: true,
   },
   {
     id: 2,
-    title: "E-Commerce AI",
+    title: "Travel Hub",
     description:
-      "An AI-powered shopping assistant that helps users find products based on natural language queries.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1523474253062-5c2ca29b4208?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    liveUrl: "#",
-    repoUrl: "#",
-    tags: ["Next.js", "OpenAI", "Stripe"],
+      "Official website for a Travel & Tourism Agency featuring destination browsing, booking, and tour packages.",
+    imageUrl: "/images/travelhub.jpg",
+    liveUrl: "https://travelhub-sd.vercel.app/",
+    repoUrl: null,
+    tags: ["Tourism", "Web App", "Fullstack"],
     featured: true,
-  },
-  {
-    id: 3,
-    title: "Crypto Portfolio",
-    description:
-      "A secure and elegant way to track cryptocurrency assets across multiple wallets and exchanges.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1621504450168-38f647319930?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    liveUrl: "#",
-    repoUrl: "#",
-    tags: ["React Native", "Web3", "Node.js"],
-    featured: false,
   },
 ];

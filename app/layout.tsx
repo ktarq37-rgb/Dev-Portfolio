@@ -13,9 +13,9 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Alex Dev - Full Stack Engineer & UI Designer",
+  title: "Hassan - Fullstack Web Developer",
   description:
-    "I craft high-performance digital experiences with a focus on motion, aesthetics, and scalability.",
+    "Fullstack Solutions connecting the dots between Users and Business Goals.",
 };
 
 export const viewport: Viewport = {

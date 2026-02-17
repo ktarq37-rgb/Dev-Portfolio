@@ -170,22 +170,10 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent" />
-
-                  {/* External link arrow */}
-                  {project.liveUrl && (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="absolute bottom-3 right-3 w-10 h-10 rounded-xl bg-neutral-950/80 backdrop-blur-sm border border-neutral-800 flex items-center justify-center text-white/60 hover:text-white hover:border-neutral-700 transition-all"
-                    >
-                      <ArrowUpRight size={18} />
-                    </a>
-                  )}
                 </div>
 
-                {/* Tags + title */}
-                <div className="p-4 flex flex-col gap-2">
+                {/* Tags + title + button */}
+                <div className="p-5 flex flex-col gap-3 flex-1">
                   <div className="flex flex-wrap gap-2">
                     {project.tags?.map((tag) => (
                       <span
@@ -196,10 +184,21 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
                       </span>
                     ))}
                   </div>
-                  <h3 className="text-base font-bold text-white">{project.title}</h3>
-                  <p className="text-xs text-white/35 leading-relaxed line-clamp-2">
+                  <h3 className="text-lg font-bold text-white">{project.title}</h3>
+                  <p className="text-sm text-white/35 leading-relaxed line-clamp-2">
                     {project.description}
                   </p>
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-auto inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-neutral-700 bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-800 hover:border-neutral-600 transition-all w-fit"
+                    >
+                      Visit Live Site
+                      <ExternalLink size={14} />
+                    </a>
+                  )}
                 </div>
               </motion.div>
             </motion.div>
@@ -267,15 +266,21 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                 Available for Freelance
               </motion.span>
 
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-sans font-bold leading-[1] mb-3 tracking-tight text-balance">
-                <span className="text-white/90">{"Hi, I'm"}</span>{" "}
-                <span className="bg-gradient-to-r from-white via-neutral-200 to-neutral-500 bg-clip-text text-transparent">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-sans font-bold leading-[1.1] mb-3 tracking-tight text-balance">
+                <span className="text-white">{"Heyyoo! I'm"}</span>{" "}
+                <span className="text-white">
                   {profile.name}
                 </span>
               </h1>
 
+              <p className="text-lg md:text-xl font-bold mb-2">
+                <span className="bg-gradient-to-r from-[#a855f7] to-[#3b82f6] bg-clip-text text-transparent">
+                  {profile.title}
+                </span>
+              </p>
+
               <p className="text-sm md:text-base text-white/50 max-w-md mb-6 leading-relaxed">
-                {profile.title}
+                {profile.tagline}
               </p>
 
               <div className="flex flex-wrap gap-2.5">
@@ -382,29 +387,33 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <div className="flex gap-1.5 mb-1.5">
-                      {project.tags?.slice(0, 3).map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-2 py-0.5 text-[9px] font-mono font-semibold rounded-md bg-violet-500/15 text-violet-300 border border-violet-500/20"
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="flex gap-1.5 mb-1.5">
+                          {project.tags?.slice(0, 3).map((tag) => (
+                            <span
+                              key={tag}
+                              className="px-2 py-0.5 text-[9px] font-mono font-semibold rounded-md bg-violet-500/15 text-violet-300 border border-violet-500/20"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                        <h4 className="text-sm font-bold text-white">{project.title}</h4>
+                      </div>
+                      {project.liveUrl && (
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-3 py-1.5 rounded-lg border border-neutral-700 bg-neutral-900/80 backdrop-blur-sm text-white text-[11px] font-semibold flex items-center gap-1.5 hover:bg-neutral-800 transition-colors opacity-0 group-hover:opacity-100"
                         >
-                          {tag}
-                        </span>
-                      ))}
+                          Visit Live Site
+                          <ExternalLink size={11} />
+                        </a>
+                      )}
                     </div>
-                    <h4 className="text-sm font-bold text-white mb-0.5">{project.title}</h4>
-                    <p className="text-[11px] text-white/50 line-clamp-1">{project.description}</p>
                   </div>
-                  {project.liveUrl && (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="absolute top-3 right-3 w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    >
-                      <ExternalLink size={14} />
-                    </a>
-                  )}
                 </div>
               </BentoCard>
             ))}
@@ -602,10 +611,10 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                 <Mail size={18} />
               </div>
               <a
-                href="mailto:hello@example.com"
+                href="mailto:hassan@example.com"
                 className="text-sm text-white/70 hover:text-violet-400 transition-colors font-medium"
               >
-                hello@example.com
+                hassan@example.com
               </a>
             </div>
           </motion.div>
