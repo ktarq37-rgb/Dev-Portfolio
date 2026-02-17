@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionTemplate, useMotionValue, useSpring } from "framer-motion";
 import { useRef, type ReactNode, type MouseEvent } from "react";
 
 interface BentoCardProps {
@@ -14,8 +14,10 @@ export function BentoCard({ children, className = "", delay = 0 }: BentoCardProp
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  const springX = useSpring(mouseX, { stiffness: 500, damping: 50 });
-  const springY = useSpring(mouseY, { stiffness: 500, damping: 50 });
+  const smoothX = useSpring(mouseX, { stiffness: 500, damping: 50 });
+  const smoothY = useSpring(mouseY, { stiffness: 500, damping: 50 });
+
+  const glowBg = useMotionTemplate`radial-gradient(400px circle at ${smoothX}px ${smoothY}px, rgba(124,58,237,0.08), transparent 60%)`;
 
   function handleMouseMove(e: MouseEvent<HTMLDivElement>) {
     if (!ref.current) return;
@@ -52,9 +54,7 @@ export function BentoCard({ children, className = "", delay = 0 }: BentoCardProp
       {/* Per-card hover glow that follows cursor */}
       <motion.div
         className="pointer-events-none absolute -inset-px z-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"
-        style={{
-          background: `radial-gradient(400px circle at ${springX.get()}px ${springY.get()}px, rgba(124,58,237,0.08), transparent 60%)`,
-        }}
+        style={{ background: glowBg }}
       />
 
       {/* Top edge shine */}
