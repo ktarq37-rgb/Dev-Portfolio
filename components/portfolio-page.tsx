@@ -7,7 +7,7 @@ import { Navbar } from "@/components/navbar";
 import { HeroAvatar, MagneticIcon } from "@/components/hero-avatar";
 import { BentoCard, BentoGrid } from "@/components/bento-grid";
 import { ContactForm } from "@/components/contact-form";
-import { Spotlight } from "@/components/spotlight";
+import { ParticleNetwork } from "@/components/particle-network";
 import {
   ArrowDown,
   Mail,
@@ -245,7 +245,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
 
   return (
     <div className="min-h-screen bg-black text-neutral-100 overflow-x-hidden">
-      <Spotlight />
+      <ParticleNetwork />
 
       {/* Noise texture */}
       <div className="noise-bg fixed inset-0 z-0 pointer-events-none" />
@@ -276,7 +276,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
               </h1>
 
               <p className="text-lg md:text-xl font-bold mb-2">
-                <span className="bg-gradient-to-r from-[#a855f7] to-[#3b82f6] bg-clip-text text-transparent">
+                <span className="shimmer-text">
                   {profile.title}
                 </span>
               </p>

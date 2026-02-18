@@ -57,7 +57,7 @@ export function Navbar() {
           ))}
           <a
             href="#contact"
-            className="ml-3 px-5 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-500 transition-colors shadow-lg shadow-violet-600/20"
+            className="rotating-border ml-3 px-5 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-500 transition-colors shadow-lg shadow-violet-600/20"
           >
             Hire Me
           </a>
