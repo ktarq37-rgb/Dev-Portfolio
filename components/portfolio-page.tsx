@@ -87,7 +87,7 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
           <motion.span
             variants={fadeUp}
             custom={0}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/[0.08] bg-zinc-900/40 backdrop-blur-sm text-white/60 text-xs font-medium mb-5"
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-950 text-white/60 text-xs font-medium mb-5"
           >
             <Briefcase size={14} className="text-white/50" />
             Projects
@@ -121,14 +121,14 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
                 <button
                   onClick={() => scroll("left")}
                   aria-label="Scroll left"
-                  className="w-10 h-10 rounded-full border border-white/[0.08] bg-zinc-900/40 backdrop-blur-sm flex items-center justify-center text-white/50 hover:text-white hover:border-white/[0.15] transition-all"
+                  className="w-10 h-10 rounded-full border border-neutral-800 bg-neutral-950 flex items-center justify-center text-white/50 hover:text-white hover:border-neutral-700 transition-colors"
                 >
                   <ChevronLeft size={18} />
                 </button>
                 <button
                   onClick={() => scroll("right")}
                   aria-label="Scroll right"
-                  className="w-10 h-10 rounded-full border border-white/[0.08] bg-zinc-900/40 backdrop-blur-sm flex items-center justify-center text-white/50 hover:text-white hover:border-white/[0.15] transition-all"
+                  className="w-10 h-10 rounded-full border border-neutral-800 bg-neutral-950 flex items-center justify-center text-white/50 hover:text-white hover:border-neutral-700 transition-colors"
                 >
                   <ChevronRight size={18} />
                 </button>
@@ -158,7 +158,7 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
               <motion.div
                 whileHover={{ y: -4 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="group relative rounded-2xl bg-zinc-900/40 backdrop-blur-xl border border-white/[0.08] hover:border-white/[0.15] overflow-hidden transition-all duration-300 h-full flex flex-col"
+                className="group relative rounded-2xl bg-neutral-950 border border-neutral-800 hover:border-neutral-700 overflow-hidden transition-colors duration-300 h-full flex flex-col"
               >
                 {/* Screenshot */}
                 <div className="relative aspect-[16/10] overflow-hidden">
@@ -178,7 +178,7 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
                     {project.tags?.map((tag) => (
                       <span
                         key={tag}
-                        className="px-3 py-1 text-xs font-mono text-white/50 rounded-lg bg-white/[0.03] border border-white/[0.08]"
+                        className="px-3 py-1 text-xs font-mono text-white/50 rounded-lg bg-neutral-900 border border-neutral-800"
                       >
                         {tag}
                       </span>
@@ -193,7 +193,7 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-auto inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/[0.1] bg-white/[0.04] backdrop-blur-sm text-white text-sm font-semibold hover:bg-violet-500/10 hover:border-violet-500/30 transition-all w-fit"
+                      className="mt-auto inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-neutral-700 bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-800 hover:border-neutral-600 transition-all w-fit"
                     >
                       Visit Live Site
                       <ExternalLink size={14} />
@@ -211,14 +211,14 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
             <button
               onClick={() => scroll("left")}
               aria-label="Scroll left"
-              className="w-10 h-10 rounded-full border border-white/[0.08] bg-zinc-900/40 backdrop-blur-sm flex items-center justify-center text-white/50 hover:text-white transition-all"
+              className="w-10 h-10 rounded-full border border-neutral-800 bg-neutral-950 flex items-center justify-center text-white/50 hover:text-white transition-colors"
             >
               <ChevronLeft size={18} />
             </button>
             <button
               onClick={() => scroll("right")}
               aria-label="Scroll right"
-              className="w-10 h-10 rounded-full border border-white/[0.08] bg-zinc-900/40 backdrop-blur-sm flex items-center justify-center text-white/50 hover:text-white transition-all"
+              className="w-10 h-10 rounded-full border border-neutral-800 bg-neutral-950 flex items-center justify-center text-white/50 hover:text-white transition-colors"
             >
               <ChevronRight size={18} />
             </button>
@@ -318,17 +318,9 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                   <motion.div
                     key={item}
                     initial={{ opacity: 0, scale: 0.85 }}
-                    animate={{
-                      opacity: 1,
-                      scale: 1,
-                      y: [0, -2, 0],
-                    }}
-                    transition={{
-                      opacity: { delay: 0.25 + i * 0.04, type: "spring" },
-                      scale: { delay: 0.25 + i * 0.04, type: "spring" },
-                      y: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 },
-                    }}
-                    whileHover={{ scale: 1.1, y: -3 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.25 + i * 0.04, type: "spring" }}
+                    whileHover={{ scale: 1.08, y: -1 }}
                     className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06] text-white/60 hover:text-white hover:border-violet-500/25 transition-colors duration-200"
                   >
                     <span className="text-[11px] font-mono font-medium">{item}</span>
@@ -441,7 +433,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
             <motion.span
               variants={fadeUp}
               custom={0}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/[0.08] bg-zinc-900/40 backdrop-blur-sm text-white/60 text-xs font-medium mb-5"
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/[0.03] text-white/60 text-xs font-medium mb-5"
             >
               <Lightbulb size={14} className="text-violet-400" />
               Skills
@@ -474,13 +466,13 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                   <motion.div
                     whileHover={{ y: -3 }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    className="group relative p-6 rounded-2xl bg-zinc-900/40 backdrop-blur-xl border border-white/[0.08] hover:border-white/[0.15] transition-all duration-300 h-full flex flex-col"
+                    className="group relative p-6 rounded-2xl bg-neutral-950 border border-neutral-800 hover:border-neutral-700 transition-colors duration-300 h-full flex flex-col"
                   >
                     {/* Card top edge shine */}
                     <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
 
                     <div className="flex items-center gap-3 mb-auto pb-8">
-                      <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white/70 shrink-0">
+                      <div className="w-10 h-10 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-white/70 shrink-0">
                         <Icon size={18} />
                       </div>
                       <h3 className="text-base font-bold text-white">{category.title}</h3>
@@ -490,7 +482,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                       {category.items.map((item) => (
                         <span
                           key={item}
-                          className="px-3 py-1.5 text-xs font-mono text-white/50 rounded-lg bg-white/[0.03] border border-white/[0.08]"
+                          className="px-3 py-1.5 text-xs font-mono text-white/50 rounded-lg bg-neutral-900 border border-neutral-800"
                         >
                           {item}
                         </span>
@@ -566,12 +558,12 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                   <motion.div
                     whileHover={{ y: -3 }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    className="group relative p-6 rounded-2xl bg-zinc-900/40 backdrop-blur-xl border border-white/[0.08] hover:border-white/[0.15] transition-all duration-300"
+                    className="group relative p-6 rounded-2xl bg-neutral-950 border border-neutral-800 hover:border-neutral-700 transition-colors duration-300"
                   >
                     <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
 
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-violet-400 shrink-0 group-hover:text-violet-300 transition-colors">
+                      <div className="w-10 h-10 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-violet-400 shrink-0 group-hover:text-violet-300 transition-colors">
                         <Icon size={18} />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -615,7 +607,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
             </p>
 
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-white/[0.04] flex items-center justify-center text-violet-400 border border-white/[0.08]">
+              <div className="w-11 h-11 rounded-xl bg-white/[0.04] flex items-center justify-center text-violet-400 border border-neutral-800">
                 <Mail size={18} />
               </div>
               <a
@@ -632,7 +624,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 60, damping: 20, delay: 0.08 }}
-            className="bg-zinc-900/40 backdrop-blur-xl p-7 rounded-2xl border border-white/[0.08]"
+            className="bg-neutral-950 p-7 rounded-2xl border border-neutral-800"
           >
             <ContactForm />
           </motion.div>
@@ -660,7 +652,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
 
         <div className="max-w-5xl mx-auto relative z-10">
           {/* Top bordered card */}
-          <div className="rounded-2xl border border-white/[0.08] bg-zinc-900/40 backdrop-blur-xl p-10 md:p-14 text-center mb-12">
+          <div className="rounded-2xl border border-neutral-800 p-10 md:p-14 text-center mb-12">
             {/* Brand */}
             <div className="flex items-center justify-center gap-2 mb-3">
               <span className="text-xl font-bold text-white tracking-tight">
@@ -700,7 +692,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                 aria-label={item.label}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-12 h-12 rounded-full border border-white/[0.08] bg-zinc-900/40 backdrop-blur-sm flex items-center justify-center text-white/50 hover:text-white hover:border-violet-500/30 hover:bg-violet-500/10 hover:shadow-[0_0_12px_rgba(124,58,237,0.2)] transition-all duration-300"
+                className="w-12 h-12 rounded-full border border-neutral-800 bg-neutral-950 flex items-center justify-center text-white/50 hover:text-white hover:border-neutral-600 transition-all duration-300"
               >
                 {item.icon}
               </a>

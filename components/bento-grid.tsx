@@ -17,8 +17,7 @@ export function BentoCard({ children, className = "", delay = 0 }: BentoCardProp
   const smoothX = useSpring(mouseX, { stiffness: 500, damping: 50 });
   const smoothY = useSpring(mouseY, { stiffness: 500, damping: 50 });
 
-  const glowBg = useMotionTemplate`radial-gradient(450px circle at ${smoothX}px ${smoothY}px, rgba(124,58,237,0.1), transparent 60%)`;
-  const borderGlow = useMotionTemplate`radial-gradient(350px circle at ${smoothX}px ${smoothY}px, rgba(124,58,237,0.25), rgba(59,130,246,0.12) 50%, transparent 80%)`;
+  const glowBg = useMotionTemplate`radial-gradient(400px circle at ${smoothX}px ${smoothY}px, rgba(124,58,237,0.08), transparent 60%)`;
 
   function handleMouseMove(e: MouseEvent<HTMLDivElement>) {
     if (!ref.current) return;
@@ -30,35 +29,28 @@ export function BentoCard({ children, className = "", delay = 0 }: BentoCardProp
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 28, scale: 0.96 }}
+      initial={{ opacity: 0, y: 24, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{
         type: "spring",
-        stiffness: 100,
-        damping: 16,
+        stiffness: 120,
+        damping: 18,
         delay,
       }}
       whileHover={{
-        scale: 1.02,
+        scale: 1.015,
         transition: { type: "spring", stiffness: 400, damping: 25 },
       }}
       onMouseMove={handleMouseMove}
       className={`
         group/card relative overflow-hidden rounded-2xl
-        bg-zinc-900/40 backdrop-blur-xl
-        transition-all duration-300
+        bg-neutral-950 backdrop-blur-xl
+        border border-neutral-800
+        hover:border-neutral-700
+        transition-colors duration-300
         ${className}
       `}
     >
-      {/* Gradient border overlay */}
-      <div className="absolute inset-0 rounded-2xl border border-white/[0.08] group-hover/card:border-white/[0.15] transition-colors duration-300 pointer-events-none z-20" />
-
-      {/* Animated gradient border glow on hover */}
-      <motion.div
-        className="pointer-events-none absolute -inset-px z-10 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"
-        style={{ background: borderGlow }}
-      />
-
       {/* Per-card hover glow that follows cursor */}
       <motion.div
         className="pointer-events-none absolute -inset-px z-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"
@@ -66,7 +58,7 @@ export function BentoCard({ children, className = "", delay = 0 }: BentoCardProp
       />
 
       {/* Top edge shine */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent z-20" />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
       <div className="relative z-10 h-full">{children}</div>
     </motion.div>
