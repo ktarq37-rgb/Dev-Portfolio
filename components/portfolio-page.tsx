@@ -163,12 +163,14 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
                 {/* Screenshot */}
                 <div className="relative aspect-[16/10] overflow-hidden">
                   <Image
-                    src={project.imageUrl}
-                    alt={project.title}
-                    fill
-                    sizes="(max-width: 768px) 85vw, 420px"
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  />
+                      src={project.imageUrl}
+                      alt={project.title}
+                      fill
+                      priority
+                      quality={75}
+                      sizes="(max-width: 768px) 85vw, 420px"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
                   <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent" />
                 </div>
 
@@ -378,13 +380,15 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                 delay={0.3 + idx * 0.06}
               >
                 <div className="relative w-full h-full overflow-hidden">
-                  <Image
-                    src={project.imageUrl}
-                    alt={project.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  />
+                    <Image
+                      src={project.imageUrl}
+                      alt={project.title}
+                      fill
+                      priority
+                      quality={75}
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-4">
                     <div className="flex items-center justify-between">
