@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
-export default {
+const config: Config = {
   darkMode: ["class"],
   content: [
     "./app/**/*.{js,jsx,ts,tsx}",
@@ -56,18 +57,14 @@ export default {
           "5": "hsl(var(--chart-5))",
         },
         sidebar: {
-          DEFAULT: "hsl(var(--sidebar))",
+          DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
+          primary: "hsl(var(--sidebar-primary))",
+          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+          accent: "hsl(var(--sidebar-accent))",
+          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
-          primary: {
-            DEFAULT: "hsl(var(--sidebar-primary))",
-            foreground: "hsl(var(--sidebar-primary-foreground))",
-          },
-          accent: {
-            DEFAULT: "hsl(var(--sidebar-accent))",
-            foreground: "hsl(var(--sidebar-accent-foreground))",
-          },
         },
       },
       fontFamily: {
@@ -90,5 +87,7 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
-} satisfies Config;
+  plugins: [tailwindcssAnimate],
+};
+
+export default config;
