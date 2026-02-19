@@ -17,7 +17,7 @@ export function BentoCard({ children, className = "", delay = 0 }: BentoCardProp
   const smoothX = useSpring(mouseX, { stiffness: 500, damping: 50 });
   const smoothY = useSpring(mouseY, { stiffness: 500, damping: 50 });
 
-  const glowBg = useMotionTemplate`radial-gradient(400px circle at ${smoothX}px ${smoothY}px, rgba(124,58,237,0.08), transparent 60%)`;
+  const glowBg = useMotionTemplate`radial-gradient(350px circle at ${smoothX}px ${smoothY}px, rgba(124,58,237,0.07), transparent 60%)`;
 
   function handleMouseMove(e: MouseEvent<HTMLDivElement>) {
     if (!ref.current) return;
@@ -44,9 +44,9 @@ export function BentoCard({ children, className = "", delay = 0 }: BentoCardProp
       onMouseMove={handleMouseMove}
       className={`
         group/card relative overflow-hidden rounded-2xl
-        bg-neutral-950 backdrop-blur-xl
-        border border-neutral-800
-        hover:border-neutral-700
+        bg-zinc-900/40 backdrop-blur-xl
+        border border-white/[0.08]
+        hover:border-white/[0.15]
         transition-colors duration-300
         ${className}
       `}

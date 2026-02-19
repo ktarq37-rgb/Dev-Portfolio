@@ -8,6 +8,7 @@ import { HeroAvatar, MagneticIcon } from "@/components/hero-avatar";
 import { BentoCard, BentoGrid } from "@/components/bento-grid";
 import { ContactForm } from "@/components/contact-form";
 import { ParticleNetwork } from "@/components/particle-network";
+import { GlassCard } from "@/components/glass-card";
 import {
   ArrowDown,
   Mail,
@@ -87,7 +88,7 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
           <motion.span
             variants={fadeUp}
             custom={0}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-950 text-white/60 text-xs font-medium mb-5"
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/[0.08] bg-zinc-900/40 backdrop-blur-sm text-white/60 text-xs font-medium mb-5"
           >
             <Briefcase size={14} className="text-white/50" />
             Projects
@@ -121,14 +122,14 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
                 <button
                   onClick={() => scroll("left")}
                   aria-label="Scroll left"
-                  className="w-10 h-10 rounded-full border border-neutral-800 bg-neutral-950 flex items-center justify-center text-white/50 hover:text-white hover:border-neutral-700 transition-colors"
+                  className="w-10 h-10 rounded-full border border-white/[0.08] bg-zinc-900/40 backdrop-blur-sm flex items-center justify-center text-white/50 hover:text-white hover:border-white/[0.15] transition-all"
                 >
                   <ChevronLeft size={18} />
                 </button>
                 <button
                   onClick={() => scroll("right")}
                   aria-label="Scroll right"
-                  className="w-10 h-10 rounded-full border border-neutral-800 bg-neutral-950 flex items-center justify-center text-white/50 hover:text-white hover:border-neutral-700 transition-colors"
+                  className="w-10 h-10 rounded-full border border-white/[0.08] bg-zinc-900/40 backdrop-blur-sm flex items-center justify-center text-white/50 hover:text-white hover:border-white/[0.15] transition-all"
                 >
                   <ChevronRight size={18} />
                 </button>
@@ -158,50 +159,52 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
               <motion.div
                 whileHover={{ y: -4 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="group relative rounded-2xl bg-neutral-950 border border-neutral-800 hover:border-neutral-700 overflow-hidden transition-colors duration-300 h-full flex flex-col"
+                className="h-full"
               >
-                {/* Screenshot */}
-                <div className="relative aspect-[16/10] overflow-hidden">
-                  <Image
+                <GlassCard className="h-full flex flex-col">
+                  {/* Screenshot */}
+                  <div className="relative aspect-[16/10] overflow-hidden rounded-t-2xl">
+                    <Image
                       src={project.imageUrl}
                       alt={project.title}
                       fill
                       priority
                       quality={75}
                       sizes="(max-width: 768px) 85vw, 420px"
-                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                      className="object-cover transition-transform duration-700 ease-out group-hover/glass:scale-105"
                     />
-                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent" />
-                </div>
-
-                {/* Tags + title + button */}
-                <div className="p-5 flex flex-col gap-3 flex-1">
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags?.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-3 py-1 text-xs font-mono text-white/50 rounded-lg bg-neutral-900 border border-neutral-800"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                   </div>
-                  <h3 className="text-lg font-bold text-white">{project.title}</h3>
-                  <p className="text-sm text-white/35 leading-relaxed line-clamp-2">
-                    {project.description}
-                  </p>
-                  {project.liveUrl && (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-auto inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-neutral-700 bg-neutral-900 text-white text-sm font-semibold hover:bg-neutral-800 hover:border-neutral-600 transition-all w-fit"
-                    >
-                      Visit Live Site
-                      <ExternalLink size={14} />
-                    </a>
-                  )}
-                </div>
+
+                  {/* Tags + title + button */}
+                  <div className="p-5 flex flex-col gap-3 flex-1">
+                    <div className="flex flex-wrap gap-2">
+                      {project.tags?.map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-3 py-1 text-xs font-mono text-white/50 rounded-lg bg-white/[0.03] border border-white/[0.08]"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <h3 className="text-lg font-bold text-white">{project.title}</h3>
+                    <p className="text-sm text-white/35 leading-relaxed line-clamp-2">
+                      {project.description}
+                    </p>
+                    {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-auto inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/[0.1] bg-white/[0.04] backdrop-blur-sm text-white text-sm font-semibold hover:bg-violet-500/10 hover:border-violet-500/30 transition-all w-fit"
+                      >
+                        Visit Live Site
+                        <ExternalLink size={14} />
+                      </a>
+                    )}
+                  </div>
+                </GlassCard>
               </motion.div>
             </motion.div>
           ))}
@@ -213,14 +216,14 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
             <button
               onClick={() => scroll("left")}
               aria-label="Scroll left"
-              className="w-10 h-10 rounded-full border border-neutral-800 bg-neutral-950 flex items-center justify-center text-white/50 hover:text-white transition-colors"
+              className="w-10 h-10 rounded-full border border-white/[0.08] bg-zinc-900/40 backdrop-blur-sm flex items-center justify-center text-white/50 hover:text-white transition-all"
             >
               <ChevronLeft size={18} />
             </button>
             <button
               onClick={() => scroll("right")}
               aria-label="Scroll right"
-              className="w-10 h-10 rounded-full border border-neutral-800 bg-neutral-950 flex items-center justify-center text-white/50 hover:text-white transition-colors"
+              className="w-10 h-10 rounded-full border border-white/[0.08] bg-zinc-900/40 backdrop-blur-sm flex items-center justify-center text-white/50 hover:text-white transition-all"
             >
               <ChevronRight size={18} />
             </button>
@@ -470,28 +473,26 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                   <motion.div
                     whileHover={{ y: -3 }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    className="group relative p-6 rounded-2xl bg-neutral-950 border border-neutral-800 hover:border-neutral-700 transition-colors duration-300 h-full flex flex-col"
                   >
-                    {/* Card top edge shine */}
-                    <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
-
-                    <div className="flex items-center gap-3 mb-auto pb-8">
-                      <div className="w-10 h-10 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-white/70 shrink-0">
-                        <Icon size={18} />
+                    <GlassCard className="p-6 h-full flex flex-col">
+                      <div className="flex items-center gap-3 mb-auto pb-8">
+                        <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white/70 shrink-0">
+                          <Icon size={18} />
+                        </div>
+                        <h3 className="text-base font-bold text-white">{category.title}</h3>
                       </div>
-                      <h3 className="text-base font-bold text-white">{category.title}</h3>
-                    </div>
 
-                    <div className="flex flex-wrap gap-2">
-                      {category.items.map((item) => (
-                        <span
-                          key={item}
-                          className="px-3 py-1.5 text-xs font-mono text-white/50 rounded-lg bg-neutral-900 border border-neutral-800"
-                        >
-                          {item}
-                        </span>
-                      ))}
-                    </div>
+                      <div className="flex flex-wrap gap-2">
+                        {category.items.map((item) => (
+                          <span
+                            key={item}
+                            className="px-3 py-1.5 text-xs font-mono text-white/50 rounded-lg bg-white/[0.03] border border-white/[0.08]"
+                          >
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </GlassCard>
                   </motion.div>
                 </motion.div>
               );
@@ -562,27 +563,26 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                   <motion.div
                     whileHover={{ y: -3 }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    className="group relative p-6 rounded-2xl bg-neutral-950 border border-neutral-800 hover:border-neutral-700 transition-colors duration-300"
                   >
-                    <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
-
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-violet-400 shrink-0 group-hover:text-violet-300 transition-colors">
-                        <Icon size={18} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1.5">
-                          <h3 className="text-sm font-bold text-white">{service.title}</h3>
-                          <ArrowUpRight
-                            size={14}
-                            className="text-white/20 group-hover:text-violet-400 transition-colors"
-                          />
+                    <GlassCard className="p-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-violet-400 shrink-0 group-hover/glass:text-violet-300 transition-colors">
+                          <Icon size={18} />
                         </div>
-                        <p className="text-[12px] text-white/40 leading-relaxed">
-                          {service.description}
-                        </p>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1.5">
+                            <h3 className="text-sm font-bold text-white">{service.title}</h3>
+                            <ArrowUpRight
+                              size={14}
+                              className="text-white/20 group-hover/glass:text-violet-400 transition-colors"
+                            />
+                          </div>
+                          <p className="text-[12px] text-white/40 leading-relaxed">
+                            {service.description}
+                          </p>
+                        </div>
                       </div>
-                    </div>
+                    </GlassCard>
                   </motion.div>
                 </motion.div>
               );
@@ -611,7 +611,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
             </p>
 
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-white/[0.04] flex items-center justify-center text-violet-400 border border-neutral-800">
+              <div className="w-11 h-11 rounded-xl bg-white/[0.04] flex items-center justify-center text-violet-400 border border-white/[0.08]">
                 <Mail size={18} />
               </div>
               <a
@@ -628,7 +628,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 60, damping: 20, delay: 0.08 }}
-            className="bg-neutral-950 p-7 rounded-2xl border border-neutral-800"
+            className="bg-zinc-900/40 backdrop-blur-xl p-7 rounded-2xl border border-white/[0.08]"
           >
             <ContactForm />
           </motion.div>
@@ -656,7 +656,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
 
         <div className="max-w-5xl mx-auto relative z-10">
           {/* Top bordered card */}
-          <div className="rounded-2xl border border-neutral-800 p-10 md:p-14 text-center mb-12">
+          <div className="rounded-2xl border border-white/[0.08] bg-zinc-900/40 backdrop-blur-xl p-10 md:p-14 text-center mb-12">
             {/* Brand */}
             <div className="flex items-center justify-center gap-2 mb-3">
               <span className="text-xl font-bold text-white tracking-tight">
@@ -696,7 +696,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                 aria-label={item.label}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-12 h-12 rounded-full border border-neutral-800 bg-neutral-950 flex items-center justify-center text-white/50 hover:text-white hover:border-neutral-600 transition-all duration-300"
+                className="w-12 h-12 rounded-full border border-white/[0.08] bg-zinc-900/40 backdrop-blur-sm flex items-center justify-center text-white/50 hover:text-white hover:border-violet-500/30 hover:bg-violet-500/10 transition-all duration-300"
               >
                 {item.icon}
               </a>
