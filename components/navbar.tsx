@@ -41,7 +41,7 @@ export function Navbar() {
           href="/"
           className="text-lg font-bold font-display tracking-tight text-foreground"
         >
-          {"Hassan"}<span className="text-violet-400">{"."}</span>
+          {"Hassan"}<span className="text-violet-400">{"."}</span><span className="text-blue-400">{"DEV"}</span>
         </Link>
 
         {/* Desktop */}
