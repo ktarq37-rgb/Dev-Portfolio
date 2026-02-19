@@ -457,46 +457,51 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
             </motion.p>
           </motion.div>
 
-          {/* Skills grid: 3 columns, matching screenshot layout */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {skillCategories.map((category, i) => {
-              const Icon = categoryIconMap[category.icon] || Code;
-              return (
-                <motion.div
-                  key={category.id}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  custom={i}
-                  variants={fadeUp}
-                >
+          {/* Skills grid: 3 columns, 2 rows, "Others" spans center vertically */}
+          <div className="rounded-3xl border border-white/[0.06] bg-zinc-950/30 p-3 md:p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+              {skillCategories.map((category, i) => {
+                const Icon = categoryIconMap[category.icon] || Code;
+                const isOthers = category.title === "Others";
+                return (
                   <motion.div
-                    whileHover={{ y: -3 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    key={category.id}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    custom={i}
+                    variants={fadeUp}
+                    className={isOthers ? "lg:row-span-2" : ""}
                   >
-                    <GlassCard className="p-6 h-full flex flex-col">
-                      <div className="flex items-center gap-3 mb-auto pb-8">
-                        <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white/70 shrink-0">
-                          <Icon size={18} />
+                    <motion.div
+                      whileHover={{ y: -3 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                      className="h-full"
+                    >
+                      <GlassCard className="p-6 h-full flex flex-col min-h-[180px]">
+                        <div className="flex items-center gap-3 mb-auto">
+                          <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white/60 shrink-0">
+                            <Icon size={18} />
+                          </div>
+                          <h3 className="text-base font-bold text-white">{category.title}</h3>
                         </div>
-                        <h3 className="text-base font-bold text-white">{category.title}</h3>
-                      </div>
 
-                      <div className="flex flex-wrap gap-2">
-                        {category.items.map((item) => (
-                          <span
-                            key={item}
-                            className="px-3 py-1.5 text-xs font-mono text-white/50 rounded-lg bg-white/[0.03] border border-white/[0.08]"
-                          >
-                            {item}
-                          </span>
-                        ))}
-                      </div>
-                    </GlassCard>
+                        <div className="flex flex-wrap gap-2 mt-6">
+                          {category.items.map((item) => (
+                            <span
+                              key={item}
+                              className="px-3 py-1.5 text-xs font-mono text-white/50 rounded-lg bg-white/[0.03] border border-white/[0.08] hover:text-white/70 hover:border-white/[0.15] transition-colors"
+                            >
+                              {item}
+                            </span>
+                          ))}
+                        </div>
+                      </GlassCard>
+                    </motion.div>
                   </motion.div>
-                </motion.div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
