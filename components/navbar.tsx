@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const navLinks = [
   { name: "Skills", href: "#skills" },
@@ -55,9 +56,10 @@ export function Navbar() {
               {link.name}
             </a>
           ))}
+          <ThemeToggle />
           <a
             href="#contact"
-            className="rotating-border ml-3 px-5 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-500 transition-colors shadow-lg shadow-violet-600/20"
+            className="rotating-border ml-2 px-5 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-500 transition-colors shadow-lg shadow-violet-600/20"
           >
             Hire Me
           </a>

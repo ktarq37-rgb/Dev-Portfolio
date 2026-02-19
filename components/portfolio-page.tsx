@@ -9,6 +9,8 @@ import { BentoCard, BentoGrid } from "@/components/bento-grid";
 import { ContactForm } from "@/components/contact-form";
 import { ParticleNetwork } from "@/components/particle-network";
 import { GlassCard } from "@/components/glass-card";
+import { CustomCursor } from "@/components/custom-cursor";
+import { BackToTop } from "@/components/back-to-top";
 import {
   ArrowDown,
   Mail,
@@ -162,18 +164,36 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
                 className="h-full"
               >
                 <GlassCard className="h-full flex flex-col">
-                  {/* Screenshot */}
-                  <div className="relative aspect-[16/10] overflow-hidden rounded-t-2xl">
-                    <Image
-                      src={project.imageUrl}
-                      alt={project.title}
-                      fill
-                      priority
-                      quality={75}
-                      sizes="(max-width: 768px) 85vw, 420px"
-                      className="object-cover transition-transform duration-700 ease-out group-hover/glass:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                  {/* Browser mockup frame */}
+                  <div className="rounded-t-2xl overflow-hidden">
+                    {/* Chrome bar */}
+                    <div className="flex items-center gap-2 px-4 py-2.5 bg-zinc-900/80 border-b border-white/[0.04]">
+                      <div className="flex gap-1.5">
+                        <div className="w-2.5 h-2.5 rounded-full bg-white/[0.08]" />
+                        <div className="w-2.5 h-2.5 rounded-full bg-white/[0.08]" />
+                        <div className="w-2.5 h-2.5 rounded-full bg-white/[0.08]" />
+                      </div>
+                      <div className="flex-1 mx-3">
+                        <div className="h-5 rounded-md bg-white/[0.04] flex items-center px-3">
+                          <span className="text-[9px] font-mono text-white/20 truncate">
+                            {project.liveUrl || `${project.title.toLowerCase().replace(/\s+/g, "-")}.vercel.app`}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    {/* Screenshot */}
+                    <div className="relative aspect-[16/10] overflow-hidden">
+                      <Image
+                        src={project.imageUrl}
+                        alt={project.title}
+                        fill
+                        priority
+                        quality={75}
+                        sizes="(max-width: 768px) 85vw, 420px"
+                        className="object-cover transition-transform duration-700 ease-out group-hover/glass:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                    </div>
                   </div>
 
                   {/* Tags + title + button */}
@@ -248,6 +268,8 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
 
   return (
     <div className="min-h-screen bg-black text-neutral-100 overflow-x-hidden">
+      <CustomCursor />
+      <BackToTop />
       <ParticleNetwork />
 
       {/* Noise texture */}
