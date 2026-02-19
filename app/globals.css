@@ -77,32 +77,6 @@
     --chart-5: 200 100% 50%;
   }
 
-  .light {
-    --background: 0 0% 98%;
-    --foreground: 0 0% 9%;
-    --primary: 263 70% 58%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 93%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 93%;
-    --muted-foreground: 0 0% 45%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 9%;
-    --accent: 0 0% 93%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 86%;
-    --input: 0 0% 86%;
-    --ring: 263 70% 58%;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
   * {
     @apply border-border;
   }
@@ -192,12 +166,6 @@
   syntax: '<angle>';
   inherits: false;
   initial-value: 0deg;
-}
-
-@media (pointer: fine) {
-  * {
-    cursor: none !important;
-  }
 }
 
 @layer utilities {
