@@ -43,8 +43,8 @@ export const profile: Profile = {
   resumeUrl: "/resume.pdf",
   socialLinks: [
     { platform: "GitHub", url: "https://github.com", icon: "Github" },
-    { platform: "Twitter", url: "https://twitter.com", icon: "Twitter" },
-    { platform: "LinkedIn", url: "https://linkedin.com", icon: "Linkedin" },
+    { platform: "LinkedIn", url: "https://www.linkedin.com/in/hassan-tarig-3ab7a6266", icon: "Linkedin" },
+    { platform: "Instagram", url: "https://www.instagram.com/pablo_ff.7", icon: "Instagram" },
   ],
 };
 
