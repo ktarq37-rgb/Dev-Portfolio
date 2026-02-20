@@ -187,46 +187,6 @@ export function Navbar() {
         </AnimatePresence>
       </motion.nav>
 
-      {/* ===== BOTTOM DOCK (desktop only) ===== */}
-      <motion.div
-        initial={{ y: 80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.6, type: "spring", stiffness: 100, damping: 20 }}
-        className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 hidden md:flex items-center gap-1.5 px-2.5 py-2 rounded-2xl bg-black/70 backdrop-blur-2xl border border-white/[0.08] shadow-2xl shadow-black/50"
-      >
-        {dockItems.map((item) => {
-          const Icon = item.icon;
-          const isActive =
-            item.href === "#"
-              ? activeSection === ""
-              : activeSection === item.href.replace("#", "");
-
-          return (
-            <motion.a
-              key={item.name}
-              href={item.href}
-              aria-label={item.name}
-              whileHover={{ scale: 1.1, y: -2 }}
-              whileTap={{ scale: 0.9 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              className={`relative w-11 h-11 rounded-xl flex items-center justify-center transition-colors duration-200 ${
-                isActive
-                  ? "bg-white/[0.1] text-white border border-white/[0.12]"
-                  : "bg-white/[0.04] text-white/50 border border-white/[0.06] hover:text-white hover:bg-white/[0.08]"
-              }`}
-            >
-              <Icon size={18} />
-              {isActive && (
-                <motion.div
-                  layoutId="dock-dot"
-                  className="absolute -bottom-2.5 w-1 h-1 rounded-full bg-violet-400"
-                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                />
-              )}
-            </motion.a>
-          );
-        })}
-      </motion.div>
     </>
   );
 }
