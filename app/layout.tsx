@@ -12,7 +12,7 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-display",
 });
 
-const siteUrl = "https://hassan.dev.vercek.app";
+const siteUrl = "https://hassan.dev.vercel.app";
 
 export const metadata: Metadata = {
   title: "Hassan - Fullstack Web Developer",
