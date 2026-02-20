@@ -12,10 +12,41 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-display",
 });
 
+const siteUrl = "https://v0-dev-portfolio-1t5079t0k-ktarq37-5274s-projects.vercel.app";
+
 export const metadata: Metadata = {
   title: "Hassan - Fullstack Web Developer",
   description:
     "Fullstack Solutions connecting the dots between Users and Business Goals.",
+  metadataBase: new URL(siteUrl),
+  openGraph: {
+    title: "Hassan.DEV - Fullstack Web Developer",
+    description:
+      "Fullstack Solutions connecting the dots between Users and Business Goals.",
+    url: siteUrl,
+    siteName: "Hassan.DEV",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Hassan.DEV - Fullstack Web Developer",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Hassan.DEV - Fullstack Web Developer",
+    description:
+      "Fullstack Solutions connecting the dots between Users and Business Goals.",
+    images: ["/og-image.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export const viewport: Viewport = {
