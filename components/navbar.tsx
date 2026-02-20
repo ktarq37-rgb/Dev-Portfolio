@@ -1,13 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  motion,
-  AnimatePresence,
-  useMotionValue,
-  useTransform,
-  useSpring,
-} from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Home,
   Lightbulb,
@@ -17,8 +11,17 @@ import {
   Mail,
   Menu,
   X,
+  FileText,
+  Phone,
 } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+
+const navLinks = [
+  { name: "Skills", href: "#skills" },
+  { name: "Projects", href: "#projects" },
+  { name: "Services", href: "#services" },
+  { name: "Contact", href: "#contact" },
+];
 
 const dockItems = [
   { name: "Home", href: "#", icon: Home },
@@ -29,91 +32,10 @@ const dockItems = [
   { name: "Contact", href: "#contact", icon: Mail },
 ];
 
-const DOCK_ICON_SIZE = 40;
-const DOCK_MAGNIFICATION = 60;
-const DOCK_DISTANCE = 120;
-
-function DockIcon({
-  item,
-  mouseX,
-  isActive,
-}: {
-  item: (typeof dockItems)[0];
-  mouseX: ReturnType<typeof useMotionValue<number>>;
-  isActive: boolean;
-}) {
-  const ref = useRef<HTMLAnchorElement>(null);
-  const [hovered, setHovered] = useState(false);
-
-  const distance = useTransform(mouseX, (val: number) => {
-    const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
-    return val - bounds.x - bounds.width / 2;
-  });
-
-  const widthSync = useTransform(
-    distance,
-    [-DOCK_DISTANCE, 0, DOCK_DISTANCE],
-    [DOCK_ICON_SIZE, DOCK_MAGNIFICATION, DOCK_ICON_SIZE]
-  );
-
-  const width = useSpring(widthSync, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
-
-  const Icon = item.icon;
-
-  return (
-    <motion.a
-      ref={ref}
-      href={item.href}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      whileTap={{ scale: 0.85, y: 4 }}
-      className="relative flex flex-col items-center"
-      aria-label={item.name}
-    >
-      {/* Tooltip */}
-      <AnimatePresence>
-        {hovered && (
-          <motion.span
-            initial={{ opacity: 0, y: 6, scale: 0.8 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 6, scale: 0.8 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="absolute -top-9 px-2.5 py-1 rounded-lg bg-black/90 backdrop-blur-md border border-white/10 text-[10px] font-semibold text-white whitespace-nowrap pointer-events-none"
-          >
-            {item.name}
-          </motion.span>
-        )}
-      </AnimatePresence>
-
-      {/* Icon container */}
-      <motion.div
-        style={{ width, height: width }}
-        className="flex items-center justify-center rounded-xl bg-white/[0.06] border border-white/[0.08] text-white/60 hover:text-white hover:bg-white/[0.1] hover:border-white/[0.15] transition-colors duration-200"
-      >
-        <Icon size={18} />
-      </motion.div>
-
-      {/* Active indicator */}
-      {isActive && (
-        <motion.div
-          layoutId="dock-active"
-          className="absolute -bottom-2 w-1 h-1 rounded-full bg-violet-400"
-          transition={{ type: "spring", stiffness: 300, damping: 25 }}
-        />
-      )}
-    </motion.a>
-  );
-}
-
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
-  const mouseX = useMotionValue(Infinity);
 
   useEffect(() => {
     const onScroll = () => {
@@ -138,12 +60,12 @@ export function Navbar() {
 
   return (
     <>
-      {/* Top bar: branding + Hire Me (desktop) + hamburger (mobile) */}
+      {/* ===== TOP NAVBAR ===== */}
       <motion.nav
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="fixed top-0 left-0 right-0 z-50 px-4 py-3"
+        className="fixed top-0 left-0 right-0 z-50 px-4 pt-3"
       >
         <div
           className={`max-w-6xl mx-auto rounded-2xl px-5 py-2.5 flex items-center justify-between transition-all duration-300 ${
@@ -152,28 +74,62 @@ export function Navbar() {
               : "bg-transparent border border-transparent"
           }`}
         >
+          {/* Brand */}
           <Link
             href="/"
-            className="text-lg font-bold font-display tracking-tight text-foreground"
+            className="text-lg font-bold tracking-tight text-white"
           >
-            {"Hassan"}
-            <span className="text-violet-400">{"."}</span>
-            <span className="text-blue-400">{"DEV"}</span>
+            {"Hassan"}<span className="text-violet-400">{"."}</span><span className="text-blue-400">{"DEV"}</span>
           </Link>
 
-          {/* Desktop: Hire Me only */}
-          <div className="hidden md:flex items-center">
+          {/* Desktop: center text nav links */}
+          <div className="hidden md:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className={`px-4 py-1.5 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                  activeSection === link.href.replace("#", "")
+                    ? "text-white"
+                    : "text-white/45 hover:text-white/80"
+                }`}
+              >
+                {link.name}
+              </a>
+            ))}
+          </div>
+
+          {/* Desktop: right side icons + CTA */}
+          <div className="hidden md:flex items-center gap-2">
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Resume"
+              className="w-9 h-9 rounded-lg flex items-center justify-center text-white/40 hover:text-white/80 hover:bg-white/[0.06] transition-all duration-200"
+            >
+              <FileText size={17} />
+            </a>
+            <a
+              href="https://wa.me/249114610204"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+              className="w-9 h-9 rounded-lg flex items-center justify-center text-white/40 hover:text-white/80 hover:bg-white/[0.06] transition-all duration-200"
+            >
+              <Phone size={17} />
+            </a>
             <a
               href="#contact"
-              className="rotating-border px-5 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-500 transition-colors shadow-lg shadow-violet-600/20"
+              className="rotating-border ml-1 px-5 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-500 transition-colors shadow-lg shadow-violet-600/20"
             >
-              Hire Me
+              Book a call
             </a>
           </div>
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden text-foreground p-1"
+            className="md:hidden text-white p-1"
             onClick={() => setIsOpen(!isOpen)}
             aria-label={isOpen ? "Close menu" : "Open menu"}
           >
@@ -201,32 +157,75 @@ export function Navbar() {
                   {link.name}
                 </a>
               ))}
+              <div className="mt-2 pt-3 border-t border-white/[0.06] flex items-center gap-2">
+                <a
+                  href="/resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-white/40 hover:text-white bg-white/[0.04]"
+                >
+                  <FileText size={18} />
+                </a>
+                <a
+                  href="https://wa.me/249114610204"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-white/40 hover:text-white bg-white/[0.04]"
+                >
+                  <Phone size={18} />
+                </a>
+                <a
+                  href="#contact"
+                  onClick={() => setIsOpen(false)}
+                  className="rotating-border ml-auto px-5 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold"
+                >
+                  Book a call
+                </a>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
       </motion.nav>
 
-      {/* Floating Dock (desktop only) */}
+      {/* ===== BOTTOM DOCK (desktop only) ===== */}
       <motion.div
         initial={{ y: 80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.6, type: "spring", stiffness: 100, damping: 20 }}
-        onMouseMove={(e) => mouseX.set(e.pageX)}
-        onMouseLeave={() => mouseX.set(Infinity)}
-        className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 hidden md:flex items-end gap-2 px-3 py-2 rounded-2xl bg-black/70 backdrop-blur-2xl border border-white/[0.08] shadow-2xl shadow-black/50"
+        className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 hidden md:flex items-center gap-1.5 px-2.5 py-2 rounded-2xl bg-black/70 backdrop-blur-2xl border border-white/[0.08] shadow-2xl shadow-black/50"
       >
-        {dockItems.map((item) => (
-          <DockIcon
-            key={item.name}
-            item={item}
-            mouseX={mouseX}
-            isActive={
-              item.href === "#"
-                ? activeSection === ""
-                : activeSection === item.href.replace("#", "")
-            }
-          />
-        ))}
+        {dockItems.map((item) => {
+          const Icon = item.icon;
+          const isActive =
+            item.href === "#"
+              ? activeSection === ""
+              : activeSection === item.href.replace("#", "");
+
+          return (
+            <motion.a
+              key={item.name}
+              href={item.href}
+              aria-label={item.name}
+              whileHover={{ scale: 1.1, y: -2 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              className={`relative w-11 h-11 rounded-xl flex items-center justify-center transition-colors duration-200 ${
+                isActive
+                  ? "bg-white/[0.1] text-white border border-white/[0.12]"
+                  : "bg-white/[0.04] text-white/50 border border-white/[0.06] hover:text-white hover:bg-white/[0.08]"
+              }`}
+            >
+              <Icon size={18} />
+              {isActive && (
+                <motion.div
+                  layoutId="dock-dot"
+                  className="absolute -bottom-2.5 w-1 h-1 rounded-full bg-violet-400"
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                />
+              )}
+            </motion.a>
+          );
+        })}
       </motion.div>
     </>
   );
