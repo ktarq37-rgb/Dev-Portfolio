@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 
 export function HeroAvatar({ avatarUrl }: { avatarUrl: string }) {
   return (
-    <div className="relative w-64 h-72 md:w-72 md:h-80 lg:w-[340px] lg:h-[380px] mx-auto flex items-end justify-center">
+    <div className="relative w-56 h-64 sm:w-64 sm:h-72 md:w-72 md:h-80 lg:w-[340px] lg:h-[380px] mx-auto flex items-end justify-center">
       {/* Background glow */}
       <motion.div
         animate={{

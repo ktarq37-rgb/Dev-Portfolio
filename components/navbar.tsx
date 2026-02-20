@@ -145,7 +145,7 @@ export function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.2 }}
-              className="absolute top-16 left-4 right-4 p-5 rounded-2xl bg-black/95 backdrop-blur-xl border border-neutral-800 md:hidden flex flex-col gap-1"
+              className="absolute top-full mt-2 left-4 right-4 p-5 rounded-2xl bg-black/95 backdrop-blur-xl border border-neutral-800 md:hidden flex flex-col gap-1"
             >
               {dockItems.map((link) => (
                 <a
@@ -157,27 +157,29 @@ export function Navbar() {
                   {link.name}
                 </a>
               ))}
-              <div className="mt-2 pt-3 border-t border-white/[0.06] flex items-center gap-2">
-                <a
-                  href="/resume.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-xl flex items-center justify-center text-white/40 hover:text-white bg-white/[0.04]"
-                >
-                  <FileText size={18} />
-                </a>
-                <a
-                  href="https://wa.me/249114610204"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-xl flex items-center justify-center text-white/40 hover:text-white bg-white/[0.04]"
-                >
-                  <Phone size={18} />
-                </a>
+              <div className="mt-2 pt-3 border-t border-white/[0.06] flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                  <a
+                    href="/resume.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-xl flex items-center justify-center text-white/40 hover:text-white bg-white/[0.04]"
+                  >
+                    <FileText size={18} />
+                  </a>
+                  <a
+                    href="https://wa.me/249114610204"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-xl flex items-center justify-center text-white/40 hover:text-white bg-white/[0.04]"
+                  >
+                    <Phone size={18} />
+                  </a>
+                </div>
                 <a
                   href="#contact"
                   onClick={() => setIsOpen(false)}
-                  className="rotating-border ml-auto px-5 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold"
+                  className="rotating-border w-full text-center px-5 py-3 rounded-xl bg-violet-600 text-white text-sm font-semibold"
                 >
                   Book a call
                 </a>

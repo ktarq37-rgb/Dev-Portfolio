@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 
 interface Particle {
   x: number;
@@ -15,6 +15,16 @@ export function ParticleNetwork() {
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const particlesRef = useRef<Particle[]>([]);
   const rafRef = useRef<number>(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || "ontouchstart" in window);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile, { passive: true });
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const initParticles = useCallback((w: number, h: number) => {
     const count = Math.min(Math.floor((w * h) / 18000), 80);
@@ -32,6 +42,8 @@ export function ParticleNetwork() {
   }, []);
 
   useEffect(() => {
+    if (isMobile) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -70,37 +82,31 @@ export function ParticleNetwork() {
       const mouse = mouseRef.current;
 
       for (const p of particles) {
-        // Subtle mouse repulsion
         const dx = p.x - mouse.x;
         const dy = p.y - mouse.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < MOUSE_DIST && dist > 0) {
-          const force = (MOUSE_DIST - dist) / MOUSE_DIST * 0.008;
+          const force = ((MOUSE_DIST - dist) / MOUSE_DIST) * 0.008;
           p.vx += (dx / dist) * force;
           p.vy += (dy / dist) * force;
         }
 
-        // Damping
         p.vx *= 0.998;
         p.vy *= 0.998;
-
         p.x += p.vx;
         p.y += p.vy;
 
-        // Wrap around edges
         if (p.x < 0) p.x = w;
         if (p.x > w) p.x = 0;
         if (p.y < 0) p.y = h;
         if (p.y > h) p.y = 0;
 
-        // Draw particle dot
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
         ctx.fill();
       }
 
-      // Draw connections
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
@@ -118,7 +124,6 @@ export function ParticleNetwork() {
           }
         }
 
-        // Connect to mouse
         const mDx = particles[i].x - mouse.x;
         const mDy = particles[i].y - mouse.y;
         const mDist = Math.sqrt(mDx * mDx + mDy * mDy);
@@ -144,7 +149,21 @@ export function ParticleNetwork() {
       window.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [initParticles]);
+  }, [initParticles, isMobile]);
+
+  // Mobile: static gradient glow instead of canvas particles
+  if (isMobile) {
+    return (
+      <div
+        className="fixed inset-0 z-0 pointer-events-none"
+        aria-hidden="true"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% 30%, rgba(124,58,237,0.06) 0%, transparent 70%), radial-gradient(ellipse 60% 50% at 80% 70%, rgba(59,130,246,0.04) 0%, transparent 60%)",
+        }}
+      />
+    );
+  }
 
   return (
     <canvas

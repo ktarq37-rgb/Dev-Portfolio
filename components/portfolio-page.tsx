@@ -78,7 +78,7 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
   }, []);
 
   return (
-    <section id="projects" className="py-24 px-4 md:px-6 relative">
+    <section id="projects" className="py-16 md:py-24 px-4 md:px-6 relative">
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Header row */}
         <motion.div
@@ -156,7 +156,7 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ type: "spring", stiffness: 80, damping: 20, delay: i * 0.1 }}
-              className="snap-start shrink-0 w-[85vw] md:w-[420px]"
+              className="snap-start shrink-0 w-[90vw] sm:w-[85vw] md:w-[420px]"
             >
               <motion.div
                 whileHover={{ y: -4 }}
@@ -199,7 +199,7 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
                         href={project.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-auto inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/[0.1] bg-white/[0.04] backdrop-blur-sm text-white text-sm font-semibold hover:bg-violet-500/10 hover:border-violet-500/30 transition-all w-fit"
+                        className="mt-auto inline-flex items-center justify-center gap-2 px-5 py-3 md:py-2.5 rounded-xl border border-white/[0.1] bg-white/[0.04] backdrop-blur-sm text-white text-sm font-semibold hover:bg-violet-500/10 hover:border-violet-500/30 transition-all w-full md:w-fit"
                       >
                         Visit Live Site
                         <ExternalLink size={14} />
@@ -258,22 +258,23 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
       <Navbar />
 
       {/* ========== HERO BENTO SECTION ========== */}
-      <section className="relative min-h-screen pt-24 pb-20 px-4 md:px-6">
+      <section className="relative min-h-screen pt-20 md:pt-24 pb-12 md:pb-20 px-4 md:px-6">
         <div className="max-w-6xl mx-auto relative z-10">
-          <BentoGrid className="grid-cols-1 md:grid-cols-3 lg:grid-cols-4 auto-rows-[170px] md:auto-rows-[190px]">
+          <BentoGrid className="grid-cols-1 md:grid-cols-3 lg:grid-cols-4 auto-rows-[minmax(170px,auto)] md:auto-rows-[190px]">
 
             {/* Hero Text -- large */}
-            <BentoCard className="md:col-span-2 md:row-span-2 p-7 flex flex-col justify-center" delay={0}>
+            <BentoCard className="md:col-span-2 md:row-span-2 p-6 md:p-7 flex flex-col justify-center" delay={0}>
               <motion.span
                 initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, type: "spring" }}
-                className="inline-block px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-[11px] font-semibold tracking-wide uppercase mb-5 w-fit"
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.15, type: "spring" }}
+                className="inline-block px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-[11px] font-semibold tracking-wide uppercase mb-4 md:mb-5 w-fit"
               >
                 Available for Freelance
               </motion.span>
 
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-sans font-bold leading-[1.1] mb-3 tracking-tight text-balance">
+              <h1 className="text-4xl md:text-4xl lg:text-5xl font-sans font-bold leading-[1.1] mb-3 tracking-tight text-balance">
                 <span className="text-white">{"Heyyoo! I'm"}</span>{" "}
                 <span className="text-white">
                   {profile.name}
@@ -286,16 +287,16 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                 </span>
               </p>
 
-              <p className="text-sm md:text-base text-white/50 max-w-md mb-6 leading-relaxed">
+              <p className="text-sm md:text-base text-white/50 max-w-md mb-5 md:mb-6 leading-relaxed">
                 {profile.tagline}
               </p>
 
-              <div className="flex flex-wrap gap-2.5">
+              <div className="flex flex-col sm:flex-row gap-2.5">
                 <motion.a
                   href={profile.resumeUrl}
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  className="px-5 py-2.5 bg-white text-black rounded-xl font-semibold text-sm flex items-center gap-2 hover:bg-white/90 transition-colors"
+                  className="px-5 py-3 md:py-2.5 bg-white text-black rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:bg-white/90 transition-colors"
                 >
                   Download CV <ArrowDown size={14} />
                 </motion.a>
@@ -303,7 +304,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                   href="#contact"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  className="px-5 py-2.5 rounded-xl border border-white/10 text-white/80 font-semibold text-sm flex items-center gap-2 hover:bg-white/[0.04] hover:border-white/20 transition-all"
+                  className="px-5 py-3 md:py-2.5 rounded-xl border border-white/10 text-white/80 font-semibold text-sm flex items-center justify-center gap-2 hover:bg-white/[0.04] hover:border-white/20 transition-all"
                 >
                   {"Let's Talk"} <Mail size={14} />
                 </motion.a>
@@ -311,7 +312,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
             </BentoCard>
 
             {/* Avatar Card */}
-            <BentoCard className="md:col-span-1 lg:col-span-2 md:row-span-2 p-0 flex items-end justify-center overflow-hidden" delay={0.08}>
+            <BentoCard className="md:col-span-1 lg:col-span-2 md:row-span-2 p-0 flex items-end justify-center overflow-hidden min-h-[280px] md:min-h-0" delay={0.08}>
               <HeroAvatar avatarUrl={profile.avatarUrl} />
             </BentoCard>
 
@@ -431,7 +432,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
       </section>
 
       {/* ========== SKILLS SECTION (matching screenshot) ========== */}
-      <section id="skills" className="py-24 px-4 md:px-6 relative">
+      <section id="skills" className="py-16 md:py-24 px-4 md:px-6 relative">
         <div className="max-w-6xl mx-auto relative z-10">
           <motion.div
             initial="hidden"
@@ -459,8 +460,8 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
             </motion.p>
           </motion.div>
 
-          {/* Skills grid: 3 columns, 2 rows, "Others" spans center vertically */}
-          <div className="rounded-3xl border border-white/[0.06] bg-zinc-950/30 p-3 md:p-4">
+          {/* Skills grid: 3 columns on desktop, single stacked column on mobile */}
+          <div className="rounded-2xl md:rounded-3xl border border-white/[0.06] bg-zinc-950/30 p-3 md:p-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
               {skillCategories.map((category, i) => {
                 const Icon = categoryIconMap[category.icon] || Code;
@@ -480,7 +481,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                       transition={{ type: "spring", stiffness: 300, damping: 25 }}
                       className="h-full"
                     >
-                      <GlassCard className="p-6 h-full flex flex-col min-h-[180px]">
+                      <GlassCard className="p-5 md:p-6 h-full flex flex-col min-h-[160px] md:min-h-[180px]">
                         <div className="flex items-center gap-3 mb-auto">
                           <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white/60 shrink-0">
                             <Icon size={18} />
@@ -509,13 +510,13 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
       </section>
 
       {/* ========== ABOUT ========== */}
-      <section id="about" className="py-24 px-4 md:px-6 relative">
+      <section id="about" className="py-16 md:py-24 px-4 md:px-6 relative">
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <motion.h2
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-6xl md:text-8xl font-sans font-bold text-white/[0.03] mb-4 select-none"
+            className="text-4xl md:text-8xl font-sans font-bold text-white/[0.03] mb-4 select-none"
           >
             ABOUT
           </motion.h2>
@@ -523,8 +524,8 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ type: "spring", stiffness: 60, damping: 20 }}
-            className="text-lg md:text-xl text-white/60 leading-relaxed max-w-2xl mx-auto"
+            transition={{ type: "spring", stiffness: 80, damping: 18 }}
+            className="text-base md:text-xl text-white/60 leading-relaxed max-w-2xl mx-auto px-2 md:px-0"
           >
             {profile.bio}
           </motion.p>
@@ -535,7 +536,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
       <ProjectsCarousel projects={projects} />
 
       {/* ========== SERVICES ========== */}
-      <section id="services" className="py-24 px-4 md:px-6 relative">
+      <section id="services" className="py-16 md:py-24 px-4 md:px-6 relative">
         <div className="max-w-6xl mx-auto relative z-10">
           <motion.div
             initial="hidden"
@@ -555,7 +556,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
             </motion.p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             {services.map((service, i) => {
               const Icon = serviceIconMap[service.icon] || Code;
               return (
@@ -599,15 +600,15 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
       </section>
 
       {/* ========== CONTACT ========== */}
-      <section id="contact" className="py-24 px-4 md:px-6 relative">
-        <div className="max-w-5xl mx-auto grid lg:grid-cols-2 gap-12 relative z-10">
+      <section id="contact" className="py-16 md:py-24 px-4 md:px-6 relative">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 relative z-10">
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 60, damping: 20 }}
           >
-            <h2 className="text-3xl md:text-5xl font-sans font-bold mb-5 tracking-tight text-white">
+            <h2 className="text-3xl md:text-5xl font-sans font-bold mb-4 md:mb-5 tracking-tight text-white">
               {"Let's work"} <br />
               <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">
                 together.
@@ -643,7 +644,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
       </section>
 
       {/* ========== FOOTER ========== */}
-      <footer className="relative pt-16 pb-0 px-4 md:px-6 overflow-hidden">
+      <footer className="relative pt-12 md:pt-16 pb-0 px-4 md:px-6 overflow-hidden">
         {/* Starfield background */}
         <div className="absolute inset-0 z-0">
           {Array.from({ length: 60 }).map((_, i) => (
@@ -663,7 +664,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
 
         <div className="max-w-5xl mx-auto relative z-10">
           {/* Top bordered card */}
-          <div className="rounded-2xl border border-white/[0.08] bg-zinc-900/40 backdrop-blur-xl p-10 md:p-14 text-center mb-12">
+          <div className="rounded-2xl border border-white/[0.08] bg-zinc-900/40 backdrop-blur-xl p-7 md:p-14 text-center mb-8 md:mb-12">
             {/* Brand */}
             <div className="flex items-center justify-center gap-2 mb-3">
               <span className="text-xl font-bold text-white tracking-tight">
@@ -708,7 +709,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
           </div>
 
           {/* Contact info grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 pb-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 pb-12 md:pb-16">
             <div>
               <p className="text-[11px] font-semibold text-white/30 tracking-[0.15em] uppercase mb-2">Email</p>
               <a href="mailto:hsn46475@gmail.com" className="text-sm text-white/80 hover:text-white transition-colors">

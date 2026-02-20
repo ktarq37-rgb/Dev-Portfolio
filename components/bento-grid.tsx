@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useMotionTemplate, useMotionValue, useSpring } from "framer-motion";
-import { useRef, type ReactNode, type MouseEvent } from "react";
+import { useRef, useState, useEffect, type ReactNode, type MouseEvent } from "react";
 
 interface BentoCardProps {
   children: ReactNode;
@@ -13,6 +13,11 @@ export function BentoCard({ children, className = "", delay = 0 }: BentoCardProp
   const ref = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
+  const [isTouch, setIsTouch] = useState(false);
+
+  useEffect(() => {
+    setIsTouch("ontouchstart" in window || window.innerWidth < 768);
+  }, []);
 
   const smoothX = useSpring(mouseX, { stiffness: 500, damping: 50 });
   const smoothY = useSpring(mouseY, { stiffness: 500, damping: 50 });
@@ -20,7 +25,7 @@ export function BentoCard({ children, className = "", delay = 0 }: BentoCardProp
   const glowBg = useMotionTemplate`radial-gradient(350px circle at ${smoothX}px ${smoothY}px, rgba(124,58,237,0.07), transparent 60%)`;
 
   function handleMouseMove(e: MouseEvent<HTMLDivElement>) {
-    if (!ref.current) return;
+    if (isTouch || !ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     mouseX.set(e.clientX - rect.left);
     mouseY.set(e.clientY - rect.top);
@@ -30,17 +35,22 @@ export function BentoCard({ children, className = "", delay = 0 }: BentoCardProp
     <motion.div
       ref={ref}
       initial={{ opacity: 0, y: 24, scale: 0.97 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-40px" }}
       transition={{
         type: "spring",
         stiffness: 120,
         damping: 18,
         delay,
       }}
-      whileHover={{
-        scale: 1.015,
-        transition: { type: "spring", stiffness: 400, damping: 25 },
-      }}
+      whileHover={
+        isTouch
+          ? undefined
+          : {
+              scale: 1.015,
+              transition: { type: "spring", stiffness: 400, damping: 25 },
+            }
+      }
       onMouseMove={handleMouseMove}
       className={`
         group/card relative overflow-hidden rounded-2xl
@@ -51,11 +61,13 @@ export function BentoCard({ children, className = "", delay = 0 }: BentoCardProp
         ${className}
       `}
     >
-      {/* Per-card hover glow that follows cursor */}
-      <motion.div
-        className="pointer-events-none absolute -inset-px z-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"
-        style={{ background: glowBg }}
-      />
+      {/* Per-card hover glow - desktop only */}
+      {!isTouch && (
+        <motion.div
+          className="pointer-events-none absolute -inset-px z-0 rounded-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"
+          style={{ background: glowBg }}
+        />
+      )}
 
       {/* Top edge shine */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
