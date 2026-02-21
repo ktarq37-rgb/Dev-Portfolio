@@ -30,8 +30,10 @@ import {
   Server,
   Monitor,
   Database,
+  GraduationCap,
+  ShieldCheck,
 } from "lucide-react";
-import type { Profile, SkillCategory, Project, Service } from "@/lib/data";
+import type { Profile, SkillCategory, Project, Service, Education } from "@/lib/data";
 
 /* ---- Icon maps ---- */
 const serviceIconMap: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
