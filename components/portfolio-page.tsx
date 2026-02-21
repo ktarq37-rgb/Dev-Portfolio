@@ -4,7 +4,7 @@ import { useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Navbar } from "@/components/navbar";
-import { HeroAvatar, MagneticIcon } from "@/components/hero-avatar";
+import { MagneticIcon } from "@/components/hero-avatar";
 import { BentoCard, BentoGrid } from "@/components/bento-grid";
 import { ContactForm } from "@/components/contact-form";
 import { ParticleNetwork } from "@/components/particle-network";
@@ -262,83 +262,106 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
         <div className="max-w-6xl mx-auto relative z-10">
           <BentoGrid className="grid-cols-1 md:grid-cols-3 lg:grid-cols-4 auto-rows-[minmax(170px,auto)] md:auto-rows-[190px]">
 
-            {/* Hero Text -- large */}
-            <BentoCard className="md:col-span-2 md:row-span-2 p-6 md:p-7 flex flex-col justify-center" delay={0}>
-              <motion.span
-                initial={{ opacity: 0, y: 8 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.15, type: "spring" }}
-                className="inline-block px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-[11px] font-semibold tracking-wide uppercase mb-4 md:mb-5 w-fit"
-              >
-                Available for Freelance
-              </motion.span>
+            {/* Hero — open layout, no card wrapper */}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ type: "spring", stiffness: 120, damping: 18 }}
+              className="col-span-1 md:col-span-3 lg:col-span-4 row-span-2 flex flex-row items-center gap-6 md:gap-10 lg:gap-14 py-4 md:py-6"
+            >
+              {/* Text block — dominant */}
+              <div className="flex-1 min-w-0">
+                <motion.span
+                  initial={{ opacity: 0, y: 8 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.15, type: "spring" }}
+                  className="inline-block px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-[11px] font-semibold tracking-wide uppercase mb-4 md:mb-5 w-fit"
+                >
+                  Available for Freelance
+                </motion.span>
 
-              {/* Mobile: row layout with inline avatar | Desktop: text only */}
-              <div className="flex flex-row items-start gap-4 md:block">
-                <div className="flex-1 min-w-0">
-                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-sans font-bold leading-[1.1] mb-3 tracking-tight text-balance">
-                    <span className="text-white">{"Heyyoo! I'm"}</span>{" "}
-                    <span className="text-white">
-                      {profile.name}
-                    </span>
-                  </h1>
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-sans font-bold leading-[1.1] mb-3 tracking-tight text-balance">
+                  <span className="text-white">{"Heyyoo! I'm"}</span>{" "}
+                  <span className="text-white">{profile.name}</span>
+                </h1>
 
-                  <p className="text-base md:text-xl font-bold mb-2">
-                    <span className="shimmer-text">
-                      {profile.title}
-                    </span>
-                  </p>
+                <p className="text-base md:text-xl font-bold mb-2">
+                  <span className="shimmer-text">{profile.title}</span>
+                </p>
+
+                <p className="text-sm md:text-base text-white/50 max-w-md mb-5 md:mb-6 leading-relaxed">
+                  {profile.tagline}
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-2.5">
+                  <motion.a
+                    href={profile.resumeUrl}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="px-5 py-3 md:py-2.5 bg-white text-black rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:bg-white/90 transition-colors"
+                  >
+                    Download CV <ArrowDown size={14} />
+                  </motion.a>
+                  <motion.a
+                    href="#contact"
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="px-5 py-3 md:py-2.5 rounded-xl border border-white/10 text-white/80 font-semibold text-sm flex items-center justify-center gap-2 hover:bg-white/[0.04] hover:border-white/20 transition-all"
+                  >
+                    {"Let's Talk"} <Mail size={14} />
+                  </motion.a>
                 </div>
+              </div>
 
-                {/* Compact inline avatar - mobile only */}
-                <div className="shrink-0 md:hidden relative w-[90px] h-[100px]">
-                  <div
-                    className="absolute inset-0 z-0 rounded-full"
-                    style={{
-                      background:
-                        "radial-gradient(ellipse at center bottom, rgba(124,58,237,0.3) 0%, transparent 65%)",
-                    }}
-                  />
+              {/* Profile image — shrink-0, beside text on all breakpoints */}
+              <div className="shrink-0 relative w-[100px] h-[110px] md:w-[220px] md:h-[260px] lg:w-[300px] lg:h-[340px]">
+                <motion.div
+                  animate={{
+                    opacity: [0.3, 0.55, 0.3],
+                    scale: [1, 1.03, 1],
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute inset-0 z-0"
+                  style={{
+                    background:
+                      "radial-gradient(ellipse at center bottom, rgba(124,58,237,0.35) 0%, transparent 65%)",
+                  }}
+                />
+                <motion.div
+                  animate={{ y: [0, -6, 0] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                  className="w-full h-full relative z-10"
+                >
                   <Image
                     src={profile.avatarUrl}
                     alt="Developer avatar"
                     fill
-                    sizes="90px"
-                    className="object-contain object-bottom drop-shadow-[0_0_20px_rgba(124,58,237,0.35)] relative z-10"
+                    sizes="(max-width: 768px) 100px, (max-width: 1024px) 220px, 300px"
+                    className="object-contain object-bottom drop-shadow-[0_0_25px_rgba(124,58,237,0.4)]"
                     priority
                   />
-                </div>
-              </div>
+                </motion.div>
 
-              <p className="text-sm md:text-base text-white/50 max-w-md mb-5 md:mb-6 leading-relaxed">
-                {profile.tagline}
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-2.5">
-                <motion.a
-                  href={profile.resumeUrl}
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="px-5 py-3 md:py-2.5 bg-white text-black rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:bg-white/90 transition-colors"
+                {/* Orbiting ring accents */}
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                  className="absolute top-2 -right-1 md:top-6 md:-right-2 w-8 h-8 md:w-12 md:h-12 border border-violet-500/20 rounded-full border-dashed hidden sm:block"
                 >
-                  Download CV <ArrowDown size={14} />
-                </motion.a>
-                <motion.a
-                  href="#contact"
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="px-5 py-3 md:py-2.5 rounded-xl border border-white/10 text-white/80 font-semibold text-sm flex items-center justify-center gap-2 hover:bg-white/[0.04] hover:border-white/20 transition-all"
-                >
-                  {"Let's Talk"} <Mail size={14} />
-                </motion.a>
-              </div>
-            </BentoCard>
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-1 md:w-1.5 md:h-1.5 bg-violet-400 rounded-full" />
+                </motion.div>
 
-            {/* Avatar Card - hidden on mobile, visible on md+ */}
-            <BentoCard className="hidden md:flex md:col-span-1 lg:col-span-2 md:row-span-2 p-0 items-end justify-center overflow-hidden" delay={0.08}>
-              <HeroAvatar avatarUrl={profile.avatarUrl} />
-            </BentoCard>
+                <motion.div
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                  className="absolute top-1/4 -left-1 md:-left-2 w-9 h-9 md:w-14 md:h-14 border border-cyan-500/20 rounded-full border-dashed hidden sm:block"
+                >
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 md:w-1.5 md:h-1.5 bg-cyan-400 rounded-full" />
+                </motion.div>
+              </div>
+            </motion.div>
 
             {/* Quick Skills summary */}
             <BentoCard className="md:col-span-2 lg:col-span-2 p-5" delay={0.15}>
