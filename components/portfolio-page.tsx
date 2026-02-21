@@ -73,22 +73,26 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
   const total = projects.length;
   const INTERVAL = 4000;
 
+  const maxIndex = Math.max(0, total - visibleCount);
+
   // Auto-slide
   useEffect(() => {
     if (paused || total <= 1) return;
     const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % total);
+      setCurrent((prev) => (prev >= maxIndex ? 0 : prev + 1));
     }, INTERVAL);
     return () => clearInterval(timer);
-  }, [paused, total]);
+  }, [paused, total, maxIndex]);
 
   const goTo = useCallback(
     (direction: "prev" | "next") => {
       setCurrent((prev) =>
-        direction === "next" ? (prev + 1) % total : (prev - 1 + total) % total
+        direction === "next"
+          ? prev >= maxIndex ? 0 : prev + 1
+          : prev <= 0 ? maxIndex : prev - 1
       );
     },
-    [total]
+    [maxIndex]
   );
 
   // Touch swipe support
@@ -114,7 +118,7 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
     return 3;
   };
 
-  const [visibleCount, setVisibleCount] = useState(3);
+  const [visibleCount, setVisibleCount] = useState(1);
   useEffect(() => {
     const update = () => setVisibleCount(getVisibleCount());
     update();
@@ -197,16 +201,15 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
           onTouchEnd={handleTouchEnd}
         >
           <motion.div
-            className="flex"
-            animate={{ x: `-${current * (100 / visibleCount)}%` }}
-            transition={{ type: "tween", ease: [0.4, 0, 0.2, 1], duration: 0.6 }}
-            style={{ gap: "1rem" }}
+            className="flex gap-4"
+            animate={{ x: `calc(-${current} * (${100 / visibleCount}% + ${16 / visibleCount}px))` }}
+            transition={{ type: "tween", ease: [0.25, 0.1, 0.25, 1], duration: 0.5 }}
           >
             {projects.map((project) => (
               <div
                 key={project.id}
                 className="shrink-0"
-                style={{ width: `calc(${100 / visibleCount}% - ${((visibleCount - 1) * 16) / visibleCount}px)`, marginRight: "16px" }}
+                style={{ width: `calc(${100 / visibleCount}% - ${((visibleCount - 1) * 16) / visibleCount}px)` }}
               >
                 <motion.div
                   whileHover={{ y: -4 }}
