@@ -274,18 +274,42 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                 Available for Freelance
               </motion.span>
 
-              <h1 className="text-4xl md:text-4xl lg:text-5xl font-sans font-bold leading-[1.1] mb-3 tracking-tight text-balance">
-                <span className="text-white">{"Heyyoo! I'm"}</span>{" "}
-                <span className="text-white">
-                  {profile.name}
-                </span>
-              </h1>
+              {/* Mobile: row layout with inline avatar | Desktop: text only */}
+              <div className="flex flex-row items-start gap-4 md:block">
+                <div className="flex-1 min-w-0">
+                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-sans font-bold leading-[1.1] mb-3 tracking-tight text-balance">
+                    <span className="text-white">{"Heyyoo! I'm"}</span>{" "}
+                    <span className="text-white">
+                      {profile.name}
+                    </span>
+                  </h1>
 
-              <p className="text-lg md:text-xl font-bold mb-2">
-                <span className="shimmer-text">
-                  {profile.title}
-                </span>
-              </p>
+                  <p className="text-base md:text-xl font-bold mb-2">
+                    <span className="shimmer-text">
+                      {profile.title}
+                    </span>
+                  </p>
+                </div>
+
+                {/* Compact inline avatar - mobile only */}
+                <div className="shrink-0 md:hidden relative w-[90px] h-[100px]">
+                  <div
+                    className="absolute inset-0 z-0 rounded-full"
+                    style={{
+                      background:
+                        "radial-gradient(ellipse at center bottom, rgba(124,58,237,0.3) 0%, transparent 65%)",
+                    }}
+                  />
+                  <Image
+                    src={profile.avatarUrl}
+                    alt="Developer avatar"
+                    fill
+                    sizes="90px"
+                    className="object-contain object-bottom drop-shadow-[0_0_20px_rgba(124,58,237,0.35)] relative z-10"
+                    priority
+                  />
+                </div>
+              </div>
 
               <p className="text-sm md:text-base text-white/50 max-w-md mb-5 md:mb-6 leading-relaxed">
                 {profile.tagline}
@@ -311,8 +335,8 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
               </div>
             </BentoCard>
 
-            {/* Avatar Card */}
-            <BentoCard className="md:col-span-1 lg:col-span-2 md:row-span-2 p-0 flex items-end justify-center overflow-hidden min-h-[280px] md:min-h-0" delay={0.08}>
+            {/* Avatar Card - hidden on mobile, visible on md+ */}
+            <BentoCard className="hidden md:flex md:col-span-1 lg:col-span-2 md:row-span-2 p-0 items-end justify-center overflow-hidden" delay={0.08}>
               <HeroAvatar avatarUrl={profile.avatarUrl} />
             </BentoCard>
 
