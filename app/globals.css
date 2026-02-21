@@ -146,6 +146,7 @@
   background-clip: text;
   color: transparent;
   animation: gradient-shimmer 4s ease-in-out infinite;
+  animation-delay: -2s;
 }
 
 .rotating-border {
