@@ -353,9 +353,9 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.25 + i * 0.04, type: "spring" }}
                     whileHover={{ scale: 1.08, y: -1 }}
-                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06] text-white/60 hover:text-white hover:border-violet-500/25 transition-colors duration-200"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.05] border border-white/[0.1] text-white/90 hover:text-white hover:bg-white/[0.1] hover:border-violet-500/30 transition-all duration-200"
                   >
-                    <span className="text-[11px] font-mono font-medium">{item}</span>
+                    <span className="text-[11px] font-sans font-semibold tracking-wide">{item}</span>
                   </motion.div>
                 ))}
               </div>
@@ -485,50 +485,48 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
           </motion.div>
 
           {/* Skills grid: 3 columns on desktop, single stacked column on mobile */}
-          <div className="rounded-2xl md:rounded-3xl border border-white/[0.06] bg-zinc-950/30 p-3 md:p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-              {skillCategories.map((category, i) => {
-                const Icon = categoryIconMap[category.icon] || Code;
-                const isOthers = category.title === "Others";
-                return (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+            {skillCategories.map((category, i) => {
+              const Icon = categoryIconMap[category.icon] || Code;
+              const isOthers = category.title === "Others";
+              return (
+                <motion.div
+                  key={category.id}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  custom={i}
+                  variants={fadeUp}
+                  className={isOthers ? "lg:row-span-2" : ""}
+                >
                   <motion.div
-                    key={category.id}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
-                    custom={i}
-                    variants={fadeUp}
-                    className={isOthers ? "lg:row-span-2" : ""}
+                    whileHover={{ y: -3 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    className="h-full"
                   >
-                    <motion.div
-                      whileHover={{ y: -3 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                      className="h-full"
-                    >
-                      <GlassCard className="p-5 md:p-6 h-full flex flex-col min-h-[160px] md:min-h-[180px]">
-                        <div className="flex items-center gap-3 mb-auto">
-                          <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white/60 shrink-0">
-                            <Icon size={18} />
-                          </div>
-                          <h3 className="text-base font-bold text-white">{category.title}</h3>
+                    <GlassCard className="p-5 md:p-6 h-full flex flex-col min-h-[160px] md:min-h-[180px]">
+                      <div className="flex items-center gap-3 mb-auto">
+                        <div className="w-10 h-10 rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center text-white/80 shrink-0">
+                          <Icon size={18} />
                         </div>
+                        <h3 className="text-base font-bold text-white tracking-tight">{category.title}</h3>
+                      </div>
 
-                        <div className="flex flex-wrap gap-2 mt-6">
-                          {category.items.map((item) => (
-                            <span
-                              key={item}
-                              className="px-3 py-1.5 text-xs font-mono text-white/50 rounded-lg bg-white/[0.03] border border-white/[0.08] hover:text-white/70 hover:border-white/[0.15] transition-colors"
-                            >
-                              {item}
-                            </span>
-                          ))}
-                        </div>
-                      </GlassCard>
-                    </motion.div>
+                      <div className="flex flex-wrap gap-2 mt-6">
+                        {category.items.map((item) => (
+                          <span
+                            key={item}
+                            className="px-3 py-1.5 text-xs font-sans font-medium tracking-wide text-white/90 rounded-lg bg-white/[0.05] border border-white/[0.1] hover:text-white hover:bg-white/[0.1] hover:border-white/[0.2] transition-all duration-200 cursor-default"
+                          >
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </GlassCard>
                   </motion.div>
-                );
-              })}
-            </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
