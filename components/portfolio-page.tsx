@@ -317,7 +317,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
 
               <div className="flex flex-col sm:flex-row gap-2.5">
                 <motion.a
-                  href={profile.resumeUrl}
+                  href="/cv"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   className="px-5 py-3 md:py-2.5 bg-white text-black rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:bg-white/90 transition-colors"
