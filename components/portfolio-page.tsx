@@ -73,40 +73,22 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
   const total = projects.length;
   const INTERVAL = 4000;
 
-  // How many cards to show
-  const [visibleCount, setVisibleCount] = useState(1);
-  useEffect(() => {
-    const getCount = () => {
-      if (window.innerWidth < 640) return 1;
-      if (window.innerWidth < 1024) return 2;
-      return 3;
-    };
-    const update = () => setVisibleCount(getCount());
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
-
-  const maxIndex = Math.max(0, total - visibleCount);
-
   // Auto-slide
   useEffect(() => {
     if (paused || total <= 1) return;
     const timer = setInterval(() => {
-      setCurrent((prev) => (prev >= maxIndex ? 0 : prev + 1));
+      setCurrent((prev) => (prev + 1) % total);
     }, INTERVAL);
     return () => clearInterval(timer);
-  }, [paused, total, maxIndex]);
+  }, [paused, total]);
 
   const goTo = useCallback(
     (direction: "prev" | "next") => {
       setCurrent((prev) =>
-        direction === "next"
-          ? prev >= maxIndex ? 0 : prev + 1
-          : prev <= 0 ? maxIndex : prev - 1
+        direction === "next" ? (prev + 1) % total : (prev - 1 + total) % total
       );
     },
-    [maxIndex]
+    [total]
   );
 
   // Touch swipe support
@@ -123,6 +105,22 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
     },
     [goTo]
   );
+
+  // How many cards to show
+  const getVisibleCount = () => {
+    if (typeof window === "undefined") return 3;
+    if (window.innerWidth < 640) return 1;
+    if (window.innerWidth < 1024) return 2;
+    return 3;
+  };
+
+  const [visibleCount, setVisibleCount] = useState(3);
+  useEffect(() => {
+    const update = () => setVisibleCount(getVisibleCount());
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
 
   return (
     <section id="projects" className="py-16 md:py-24 px-4 md:px-6 relative">
@@ -199,15 +197,16 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
           onTouchEnd={handleTouchEnd}
         >
           <motion.div
-            className="flex gap-4"
-            animate={{ x: `calc(-${current} * (${100 / visibleCount}% + ${16 / visibleCount}px))` }}
-            transition={{ type: "tween", ease: [0.25, 0.1, 0.25, 1], duration: 0.5 }}
+            className="flex"
+            animate={{ x: `-${current * (100 / visibleCount)}%` }}
+            transition={{ type: "tween", ease: [0.4, 0, 0.2, 1], duration: 0.6 }}
+            style={{ gap: "1rem" }}
           >
             {projects.map((project) => (
               <div
                 key={project.id}
                 className="shrink-0"
-                style={{ width: `calc(${100 / visibleCount}% - ${((visibleCount - 1) * 16) / visibleCount}px)` }}
+                style={{ width: `calc(${100 / visibleCount}% - ${((visibleCount - 1) * 16) / visibleCount}px)`, marginRight: "16px" }}
               >
                 <motion.div
                   whileHover={{ y: -4 }}
