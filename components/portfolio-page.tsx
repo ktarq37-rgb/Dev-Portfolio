@@ -73,6 +73,20 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
   const total = projects.length;
   const INTERVAL = 4000;
 
+  // How many cards to show
+  const [visibleCount, setVisibleCount] = useState(1);
+  useEffect(() => {
+    const getCount = () => {
+      if (window.innerWidth < 640) return 1;
+      if (window.innerWidth < 1024) return 2;
+      return 3;
+    };
+    const update = () => setVisibleCount(getCount());
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
   const maxIndex = Math.max(0, total - visibleCount);
 
   // Auto-slide
@@ -109,22 +123,6 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
     },
     [goTo]
   );
-
-  // How many cards to show
-  const getVisibleCount = () => {
-    if (typeof window === "undefined") return 3;
-    if (window.innerWidth < 640) return 1;
-    if (window.innerWidth < 1024) return 2;
-    return 3;
-  };
-
-  const [visibleCount, setVisibleCount] = useState(1);
-  useEffect(() => {
-    const update = () => setVisibleCount(getVisibleCount());
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
 
   return (
     <section id="projects" className="py-16 md:py-24 px-4 md:px-6 relative">
