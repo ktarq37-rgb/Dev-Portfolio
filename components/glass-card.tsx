@@ -34,7 +34,7 @@ export function GlassCard({ children, className = "" }: GlassCardProps) {
     <div
       ref={ref}
       onMouseMove={handleMouseMove}
-      className={`group/glass relative overflow-hidden rounded-2xl bg-zinc-900/40 backdrop-blur-xl border border-white/[0.08] hover:border-white/[0.15] transition-colors duration-300 ${className}`}
+      className={`group/glass relative overflow-hidden rounded-2xl bg-zinc-900/50 backdrop-blur-2xl border border-white/[0.08] hover:border-white/[0.16] shadow-[0_2px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_30px_rgba(0,0,0,0.4)] transition-all duration-300 ${className}`}
     >
       {/* Mouse-tracking spotlight glow - desktop only */}
       {!isTouch && (

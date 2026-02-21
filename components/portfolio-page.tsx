@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Navbar } from "@/components/navbar";
@@ -68,13 +68,58 @@ const fadeUp = {
 
 /* ---- Projects Carousel ---- */
 function ProjectsCarousel({ projects }: { projects: Project[] }) {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [current, setCurrent] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const total = projects.length;
+  const INTERVAL = 4000;
 
-  const scroll = useCallback((direction: "left" | "right") => {
-    if (!scrollRef.current) return;
-    const cardWidth = scrollRef.current.querySelector("div")?.offsetWidth ?? 400;
-    const offset = direction === "left" ? -(cardWidth + 16) : cardWidth + 16;
-    scrollRef.current.scrollBy({ left: offset, behavior: "smooth" });
+  // Auto-slide
+  useEffect(() => {
+    if (paused || total <= 1) return;
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % total);
+    }, INTERVAL);
+    return () => clearInterval(timer);
+  }, [paused, total]);
+
+  const goTo = useCallback(
+    (direction: "prev" | "next") => {
+      setCurrent((prev) =>
+        direction === "next" ? (prev + 1) % total : (prev - 1 + total) % total
+      );
+    },
+    [total]
+  );
+
+  // Touch swipe support
+  const touchStartX = useRef(0);
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  }, []);
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      const diff = touchStartX.current - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        goTo(diff > 0 ? "next" : "prev");
+      }
+    },
+    [goTo]
+  );
+
+  // How many cards to show
+  const getVisibleCount = () => {
+    if (typeof window === "undefined") return 3;
+    if (window.innerWidth < 640) return 1;
+    if (window.innerWidth < 1024) return 2;
+    return 3;
+  };
+
+  const [visibleCount, setVisibleCount] = useState(3);
+  useEffect(() => {
+    const update = () => setVisibleCount(getVisibleCount());
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
   }, []);
 
   return (
@@ -122,15 +167,15 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
             >
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => scroll("left")}
-                  aria-label="Scroll left"
+                  onClick={() => goTo("prev")}
+                  aria-label="Previous project"
                   className="w-10 h-10 rounded-full border border-white/[0.08] bg-zinc-900/40 backdrop-blur-sm flex items-center justify-center text-white/50 hover:text-white hover:border-white/[0.15] transition-all"
                 >
                   <ChevronLeft size={18} />
                 </button>
                 <button
-                  onClick={() => scroll("right")}
-                  aria-label="Scroll right"
+                  onClick={() => goTo("next")}
+                  aria-label="Next project"
                   className="w-10 h-10 rounded-full border border-white/[0.08] bg-zinc-900/40 backdrop-blur-sm flex items-center justify-center text-white/50 hover:text-white hover:border-white/[0.15] transition-all"
                 >
                   <ChevronRight size={18} />
@@ -143,94 +188,118 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
           </div>
         </motion.div>
 
-        {/* Scrollable cards row */}
+        {/* Carousel track */}
         <div
-          ref={scrollRef}
-          className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          className="overflow-hidden"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
-          {projects.map((project, i) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ type: "spring", stiffness: 80, damping: 20, delay: i * 0.1 }}
-              className="snap-start shrink-0 w-[90vw] sm:w-[85vw] md:w-[420px]"
-            >
-              <motion.div
-                whileHover={{ y: -4 }}
-                transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="h-full"
+          <motion.div
+            className="flex"
+            animate={{ x: `-${current * (100 / visibleCount)}%` }}
+            transition={{ type: "tween", ease: [0.4, 0, 0.2, 1], duration: 0.6 }}
+            style={{ gap: "1rem" }}
+          >
+            {projects.map((project) => (
+              <div
+                key={project.id}
+                className="shrink-0"
+                style={{ width: `calc(${100 / visibleCount}% - ${((visibleCount - 1) * 16) / visibleCount}px)`, marginRight: "16px" }}
               >
-                <GlassCard className="h-full flex flex-col">
-                  {/* Screenshot */}
-                  <div className="relative aspect-[16/10] overflow-hidden rounded-t-2xl">
-                    <Image
-                      src={project.imageUrl}
-                      alt={project.title}
-                      fill
-                      priority
-                      quality={75}
-                      sizes="(max-width: 768px) 85vw, 420px"
-                      className="object-cover transition-transform duration-700 ease-out group-hover/glass:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                  </div>
-
-                  {/* Tags + title + button */}
-                  <div className="p-5 flex flex-col gap-3 flex-1">
-                    <div className="flex flex-wrap gap-2">
-                      {project.tags?.map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-3 py-1 text-xs font-mono text-white/50 rounded-lg bg-white/[0.03] border border-white/[0.08]"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+                <motion.div
+                  whileHover={{ y: -4 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                  className="h-full"
+                >
+                  <GlassCard className="h-full flex flex-col">
+                    {/* Screenshot */}
+                    <div className="relative aspect-[16/10] overflow-hidden rounded-t-2xl">
+                      <Image
+                        src={project.imageUrl}
+                        alt={project.title}
+                        fill
+                        quality={75}
+                        sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
+                        className="object-cover transition-transform duration-700 ease-out group-hover/glass:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                     </div>
-                    <h3 className="text-lg font-bold text-white">{project.title}</h3>
-                    <p className="text-sm text-white/35 leading-relaxed line-clamp-2">
-                      {project.description}
-                    </p>
-                    {project.liveUrl && (
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-auto inline-flex items-center justify-center gap-2 px-5 py-3 md:py-2.5 rounded-xl border border-white/[0.1] bg-white/[0.04] backdrop-blur-sm text-white text-sm font-semibold hover:bg-violet-500/10 hover:border-violet-500/30 transition-all w-full md:w-fit"
-                      >
-                        Visit Live Site
-                        <ExternalLink size={14} />
-                      </a>
-                    )}
-                  </div>
-                </GlassCard>
-              </motion.div>
-            </motion.div>
-          ))}
+
+                    {/* Tags + title + button */}
+                    <div className="p-5 flex flex-col gap-3 flex-1">
+                      <div className="flex flex-wrap gap-2">
+                        {project.tags?.map((tag) => (
+                          <span
+                            key={tag}
+                            className="px-3 py-1 text-xs font-medium tracking-wide text-white rounded-full bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-200"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      <h3 className="text-lg font-bold text-white">{project.title}</h3>
+                      <p className="text-sm text-white/35 leading-relaxed line-clamp-2">
+                        {project.description}
+                      </p>
+                      {project.liveUrl && (
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-auto inline-flex items-center justify-center gap-2 px-5 py-3 md:py-2.5 rounded-xl border border-white/[0.1] bg-white/[0.04] backdrop-blur-sm text-white text-sm font-semibold hover:bg-violet-500/10 hover:border-violet-500/30 transition-all w-full md:w-fit"
+                        >
+                          Visit Live Site
+                          <ExternalLink size={14} />
+                        </a>
+                      )}
+                    </div>
+                  </GlassCard>
+                </motion.div>
+              </div>
+            ))}
+          </motion.div>
         </div>
 
-        {/* Mobile navigation */}
-        <div className="flex md:hidden items-center justify-between mt-4">
-          <div className="flex items-center gap-2">
+        {/* Dot indicators + mobile arrows */}
+        <div className="flex items-center justify-between mt-6">
+          <div className="flex md:hidden items-center gap-2">
             <button
-              onClick={() => scroll("left")}
-              aria-label="Scroll left"
+              onClick={() => goTo("prev")}
+              aria-label="Previous project"
               className="w-10 h-10 rounded-full border border-white/[0.08] bg-zinc-900/40 backdrop-blur-sm flex items-center justify-center text-white/50 hover:text-white transition-all"
             >
               <ChevronLeft size={18} />
             </button>
             <button
-              onClick={() => scroll("right")}
-              aria-label="Scroll right"
+              onClick={() => goTo("next")}
+              aria-label="Next project"
               className="w-10 h-10 rounded-full border border-white/[0.08] bg-zinc-900/40 backdrop-blur-sm flex items-center justify-center text-white/50 hover:text-white transition-all"
             >
               <ChevronRight size={18} />
             </button>
           </div>
-          <span className="text-sm text-white/50">See all</span>
+
+          {/* Dots */}
+          <div className="flex items-center gap-1.5 mx-auto md:mx-0">
+            {projects.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrent(i)}
+                aria-label={`Go to project ${i + 1}`}
+                className={`rounded-full transition-all duration-300 ${
+                  i === current
+                    ? "w-6 h-2 bg-violet-500"
+                    : "w-2 h-2 bg-white/20 hover:bg-white/40"
+                }`}
+              />
+            ))}
+          </div>
+
+          <span className="hidden md:block text-sm text-white/50 hover:text-white transition-colors cursor-pointer">
+            See all
+          </span>
         </div>
       </div>
     </section>
@@ -317,7 +386,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
 
               <div className="flex flex-col sm:flex-row gap-2.5">
                 <motion.a
-                  href={profile.resumeUrl}
+                  href="/cv"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   className="px-5 py-3 md:py-2.5 bg-white text-black rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:bg-white/90 transition-colors"
@@ -353,9 +422,9 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.25 + i * 0.04, type: "spring" }}
                     whileHover={{ scale: 1.08, y: -1 }}
-                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06] text-white/60 hover:text-white hover:border-violet-500/25 transition-colors duration-200"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.05] border border-white/[0.1] text-white/90 hover:text-white hover:bg-white/[0.1] hover:border-violet-500/30 transition-all duration-200"
                   >
-                    <span className="text-[11px] font-mono font-medium">{item}</span>
+                    <span className="text-[11px] font-sans font-semibold tracking-wide">{item}</span>
                   </motion.div>
                 ))}
               </div>
@@ -427,7 +496,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                           {project.tags?.slice(0, 3).map((tag) => (
                             <span
                               key={tag}
-                              className="px-2 py-0.5 text-[9px] font-mono font-semibold rounded-md bg-violet-500/15 text-violet-300 border border-violet-500/20"
+                              className="px-2 py-0.5 text-[9px] font-medium font-semibold tracking-wide rounded-full bg-white/10 text-white border border-white/20 hover:bg-white/20 transition-all duration-200"
                             >
                               {tag}
                             </span>
@@ -485,50 +554,48 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
           </motion.div>
 
           {/* Skills grid: 3 columns on desktop, single stacked column on mobile */}
-          <div className="rounded-2xl md:rounded-3xl border border-white/[0.06] bg-zinc-950/30 p-3 md:p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-              {skillCategories.map((category, i) => {
-                const Icon = categoryIconMap[category.icon] || Code;
-                const isOthers = category.title === "Others";
-                return (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+            {skillCategories.map((category, i) => {
+              const Icon = categoryIconMap[category.icon] || Code;
+              const isOthers = category.title === "Others";
+              return (
+                <motion.div
+                  key={category.id}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  custom={i}
+                  variants={fadeUp}
+                  className={isOthers ? "lg:row-span-2" : ""}
+                >
                   <motion.div
-                    key={category.id}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
-                    custom={i}
-                    variants={fadeUp}
-                    className={isOthers ? "lg:row-span-2" : ""}
+                    whileHover={{ y: -3 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    className="h-full"
                   >
-                    <motion.div
-                      whileHover={{ y: -3 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                      className="h-full"
-                    >
-                      <GlassCard className="p-5 md:p-6 h-full flex flex-col min-h-[160px] md:min-h-[180px]">
-                        <div className="flex items-center gap-3 mb-auto">
-                          <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white/60 shrink-0">
-                            <Icon size={18} />
-                          </div>
-                          <h3 className="text-base font-bold text-white">{category.title}</h3>
+                    <GlassCard className="p-5 md:p-6 h-full flex flex-col min-h-[160px] md:min-h-[180px]">
+                      <div className="flex items-center gap-3 mb-auto">
+                        <div className="w-10 h-10 rounded-xl bg-white/[0.06] border border-white/[0.1] flex items-center justify-center text-white/80 shrink-0">
+                          <Icon size={18} />
                         </div>
+                        <h3 className="text-base font-bold text-white tracking-tight">{category.title}</h3>
+                      </div>
 
-                        <div className="flex flex-wrap gap-2 mt-6">
-                          {category.items.map((item) => (
-                            <span
-                              key={item}
-                              className="px-3 py-1.5 text-xs font-mono text-white/50 rounded-lg bg-white/[0.03] border border-white/[0.08] hover:text-white/70 hover:border-white/[0.15] transition-colors"
-                            >
-                              {item}
-                            </span>
-                          ))}
-                        </div>
-                      </GlassCard>
-                    </motion.div>
+                      <div className="flex flex-wrap gap-2 mt-6">
+                        {category.items.map((item) => (
+                          <span
+                            key={item}
+                            className="px-3 py-1.5 text-xs font-sans font-medium tracking-wide text-white/90 rounded-lg bg-white/[0.05] border border-white/[0.1] hover:text-white hover:bg-white/[0.1] hover:border-white/[0.2] transition-all duration-200 cursor-default"
+                          >
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </GlassCard>
                   </motion.div>
-                );
-              })}
-            </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -692,7 +759,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
             {/* Brand */}
             <div className="flex items-center justify-center gap-2 mb-3">
               <span className="text-xl font-bold text-white tracking-tight">
-                {"Hassan"}<span className="text-violet-400">.</span><span className="text-blue-400">DEV</span>
+                {"Hassan"}<span className="text-violet-400">.</span><span className="shimmer-dev">DEV</span>
               </span>
             </div>
             <p className="text-sm text-white/40">
