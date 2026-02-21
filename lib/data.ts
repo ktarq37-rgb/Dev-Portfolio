@@ -112,24 +112,6 @@ export const services: Service[] = [
   },
 ];
 
-export interface Education {
-  id: number;
-  degree: string;
-  field: string;
-  institution: string;
-  status: string;
-}
-
-export const education: Education[] = [
-  {
-    id: 1,
-    degree: "Bachelor's Degree",
-    field: "Information Security",
-    institution: "Currently Studying",
-    status: "In Progress",
-  },
-];
-
 export const projects: Project[] = [
   {
     id: 1,
