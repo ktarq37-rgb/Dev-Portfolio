@@ -184,7 +184,7 @@ function ProjectsCarousel({ projects }: { projects: Project[] }) {
                       {project.tags?.map((tag) => (
                         <span
                           key={tag}
-                          className="px-3 py-1 text-xs font-mono text-white/50 rounded-lg bg-white/[0.03] border border-white/[0.08]"
+                          className="px-3 py-1 text-xs font-medium tracking-wide text-white rounded-full bg-white/10 border border-white/20 hover:bg-white/20 transition-all duration-200"
                         >
                           {tag}
                         </span>
@@ -427,7 +427,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
                           {project.tags?.slice(0, 3).map((tag) => (
                             <span
                               key={tag}
-                              className="px-2 py-0.5 text-[9px] font-mono font-semibold rounded-md bg-violet-500/15 text-violet-300 border border-violet-500/20"
+                              className="px-2 py-0.5 text-[9px] font-medium font-semibold tracking-wide rounded-full bg-white/10 text-white border border-white/20 hover:bg-white/20 transition-all duration-200"
                             >
                               {tag}
                             </span>
