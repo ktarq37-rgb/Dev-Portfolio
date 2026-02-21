@@ -79,7 +79,7 @@ export function Navbar() {
             href="/"
             className="text-lg font-bold tracking-tight text-white"
           >
-            {"Hassan"}<span className="text-violet-400">{"."}</span><span className="text-blue-400">{"DEV"}</span>
+            {"Hassan"}<span className="text-violet-400">{"."}</span><span className="shimmer-dev">{"DEV"}</span>
           </Link>
 
           {/* Desktop: center text nav links */}

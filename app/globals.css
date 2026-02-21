@@ -132,6 +132,23 @@
   animation: gradient-shimmer 4s ease-in-out infinite;
 }
 
+.shimmer-dev {
+  background: linear-gradient(
+    90deg,
+    #a855f7 0%,
+    #3b82f6 25%,
+    #a855f7 50%,
+    #3b82f6 75%,
+    #a855f7 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-shimmer 4s ease-in-out infinite;
+  animation-delay: -2s;
+}
+
 .rotating-border {
   position: relative;
   z-index: 0;

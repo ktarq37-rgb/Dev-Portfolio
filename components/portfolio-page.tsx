@@ -692,7 +692,7 @@ export function PortfolioPage({ profile, skillCategories, projects, services }: 
             {/* Brand */}
             <div className="flex items-center justify-center gap-2 mb-3">
               <span className="text-xl font-bold text-white tracking-tight">
-                {"Hassan"}<span className="text-violet-400">.</span><span className="text-blue-400">DEV</span>
+                {"Hassan"}<span className="text-violet-400">.</span><span className="shimmer-dev">DEV</span>
               </span>
             </div>
             <p className="text-sm text-white/40">
